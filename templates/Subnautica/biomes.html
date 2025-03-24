@@ -1,0 +1,63 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+{% load link_filter %}
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/list.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+
+    <div class="info_main_wrapper">
+            <section class="ex_info_section">
+                <h2 class="ex_title">Biomes</h2>
+                <p class="ex_info">In <a href="{% url "Subnautica:subnautica_view" %}">Subnautica</a>, biomes are distinctive regions that host varied ecosystems brimming with unique floras, faunas, and resources.
+                                    These biomes contribute to the game's extensive navigation and exploration elements, that provide the player with numerous settings to explore and discover.
+                                    Biomes range from lush <a href="Biomes/kelp_forest.html">Kelp Forests </a>to harsh <a href="Biomes/lava_lakes.html">Lava Lakes </a>that offer a broad range of challenges and rewards.
+                                    <br /><br />  The first biome the player will experience is the <a href="Biomes/safe_shallows.html">Safe Shallows </a>, which offers a respite from the inhospitable ocean.
+                                    As the player progresses, they will encounter more treacherous areas such as the <a href="Biomes/dunes.html">Dunes </a>and <a href="Biomes/lost_river.html">Lost River </a>, which contain hazardous features, hostile creatures, and hidden leviathans.
+                                    Biomes vary in atmosphere and visuals, with each offering the player a unique view on the vibrant planet of 4546B.</p>
+            </section>
+            <section class="ex_pic_section">
+                <h3 class="ex_pic_title">Safe Shallows</h3>
+                <img src="{% static "img/Biomes/safe_shallows.webp" %}" alt="example biome" class="ex_pic" />
+                <a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}" class="ex_link">Safe Shallows</a>
+            </section>
+    </div>
+    <div class="list_main_wrapper">
+        <section class="list_title_wrapper">
+            <h4 class="list_title">Biomes</h4>
+        </section>
+
+        <section class="item_list">
+            <!-------------------------------------------->
+            <div class="list_header">
+                <p>Biome</p>
+                <p>Description</p>
+                <p>Depth Range</p>
+                <p>Resources</p>
+            </div>
+
+            <!-------------------------------------------->
+            {% for biome in biomes_list %}
+            <div class="item">
+                <div class="item_pic">
+                    <img src="{% static 'img/Biomes/'|add:biome.get_img_name %}" alt="{{ biome.biome }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:biome_view' biome_name=biome.get_biome_url %}">{{ biome.biome }}</a>
+                </div>
+                <p class="item_desc">
+                    {{ biome.short_description|convert_to_links|safe }}
+                </p>
+                <ul class="depth_range">
+                    <li><a>{{ biome.depth_range }}</a></li>
+                </ul>
+                <ul class="biome_resources">
+                    {% for resource in biome.resources %}
+                    <li><a href="{{ resource.url }}">{{ resource.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}

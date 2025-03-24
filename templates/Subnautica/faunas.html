@@ -1,0 +1,867 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/list.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+    <div class="info_main_wrapper">
+            <section class="ex_info_section">
+                <h2 class="ex_title">Fauna</h2>
+                <p class="ex_info">
+                    On Planet 4546B, fauna can be found everywhere within the Crater"s Edge.
+                    Fauna can come in all shape, size, and forms. From a tiny rock dwelling <a href="Faunas/rockgrub.html">Rockgrub</a> to the massive <a href="Faunas/sea_dragon_lev.html">Sea Dragon Leviathan</a>.
+                    Fauna is often extremely adapted to their environments, which results in incredibly diverse and unique species.
+                    Fauna can range from passive herbivores to extremely aggressive apex predators. Caution is always advised when approaching a species on this planet.
+                </p>
+            </section>
+            <section class="ex_pic_section">
+                <h3 class="ex_pic_title">Reaper Leviathan</h3>
+                <img src="{% static "img/Fauna/reaper_lev.webp" %}" alt="example fauna" class="ex_pic" />
+                <a href="Faunas/reaper_lev.html" class="ex_link">Reaper Leviathan</a>
+            </section>
+    </div>
+
+    <!--Section to display list of fauna and their information-->
+    <div class="list_main_wrapper">
+        <section class="list_title_wrapper">
+            <h4 class="list_title">Fauna</h4>
+        </section>
+
+        <section class="item_list">
+            <!--All Fauna Images are from the official Subnautica wiki: https://subnautica.fandom.com/wiki/Fauna -->
+            <!-------------------------------------------->
+            <div class="list_header">
+                <p>Fauna</p>
+                <p>Attitude</p>
+                <p>Biome</p>
+            </div>
+
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/amoeboid.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="amoeboid" %}">Amoeboid</a>
+                </div>
+                <p class="item_desc">Passive</p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="lost_river" %}">Lost River</a></li>
+                </ul>
+            </div>
+    
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/ancient_floater.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="ancient_floater" %}">Ancient Floater</a>
+                </div>
+                <p class="item_desc">Passive</p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="floating_island" %}">Floating Island</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_zone" %}">Blood Kelp Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="underwater_islands" %}">Underwater Islands</a></li>
+                </ul>
+            </div>
+    
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/ampeel.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="ampeel" %}">Ampeel</a>
+                </div>
+                <p class="item_desc">Aggressive</p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_caves" %}">Blood Kelp Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_zone" %}">Blood Kelp Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/bleeder.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="bleeder" %}">Bleeder</a>
+                </div>
+                <p class="item_desc">Aggressive</p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="deep_sparse_reef" %}">Deep Sparse Reef</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest" %}">Kelp Forest</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest_caves" %}">Kelp Forest Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="lost_river" %}">Lost River</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/biter.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="biter" %}">Biter</a>
+                </div>
+                <p class="item_desc">Aggressive</p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="crash_zone_mesas" %}">Crash Zone Mesas</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="grassy_plateaus" %}">Grassy Plateaus</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="grassy_plateaus_caves" %}">Grassy Plateaus Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="jellyshroom_caves" %}">Jellyshroom Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mountains" %}">Mountains</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mountains_caves" %}">Mountains Caves</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/bladderfish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="bladderfish" %}">Bladderfish</a>
+                </div>
+                <p class="item_desc">Passive</p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="crash_zone_mesas" %}">Crash Zone Mesas</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="dunes" %}">Dunes</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="grand_reef" %}">Grand Reef</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="grassy_plateaus" %}">Grassy Plateaus</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest" %}">Kelp Forest</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="lost_river" %}">Lost River</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mushroom_forest" %}">Mushroom Forest</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Safe Shallows</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/blood_crawler.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="blood_crawler" %}">Blood Crawler</a>
+                </div>
+                <p class="item_desc">Aggressive</p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_zone" %}">Blood Kelp Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_caves" %}">Blood Kelp Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="lost_river" %}">Lost River</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/boomerang.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="boomerang" %}">Boomerang</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="crag_field" %}">Crag Field</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="crash_zone" %}">Crash Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="deep_grand_reef" %}">Deep Grand Reef</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="dunes" %}">Dunes</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="grand_reef" %}">Grand Reef</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="grassy_plateaus" %}">Grassy Plateaus</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest" %}">Kelp Forest</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mountains" %}">Mountains</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mountains_caves" %}">Mountains Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Safe Shallows</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows_caves" %}">Safe Shallows Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="sea_treaders_path" %}">Sea Treader"s Path</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="sea_treaders_tunnel_caves" %}">Sea Treader"s Tunnel Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="underwater_islands" %}">Underwater Islands</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/boneshark.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="boneshark" %}">Boneshark</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="crag_field" %}">Crag Field</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="crash_zone_mesas" %}">Crash Zone Mesas</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mushroom_forest" %}">Mushroom Forest</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="underwater_islands" %}">Underwater Islands</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/cave_crawler.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="cave_crawler" %}">Cave Crawler</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="dunes" %}">Dunes</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="dunes_caves" %}">Dunes Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="floating_island" %}">Floating Island</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mountain_island" %}">Mountain Island</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="underwater_islands_caves" %}">Underwater Islands Caves</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/crabsnake.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="crabsnake" %}">Crabsnake</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="jellyshroom_caves" %}">Jellyshroom Caves</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/crabsquid.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="crabsquid" %}">Crabsquid</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="deep_grand_reef" %}">Deep Grand Reef</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_caves" %}">Blood Kelp Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_zone" %}">Blood Kelp Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="lost_river" %}">Lost River</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/crashfish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="crashfish" %}">Crashfish</a>
+                </div>
+                <p class="item_desc">
+                    Defensive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest_caves" %}">Kelp Forest Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows_caves" %}">Safe Shallows Caves</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/crimson_ray.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="crimson_ray" %}">Crimson Ray</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="inactive_lava_zone" %}">Inactive Lava Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="lava_lakes" %}">Lava Lakes</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/cuddlefish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="cuddlefish" %}">Cuddlefish</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="deep_grand_reef" %}">Deep Grand Reef</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="dunes" %}">Dunes</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="lost_river" %}">Lost River</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mushroom_forest_caves" %}">Mushroom Forest Caves</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/eyeye.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="eyeye" %}">Eyeye</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone_caves" %}">Bulb Zone Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="crash_zone" %}">Crash Zone</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="dunes" %}">Dunes</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="grand_reef" %}">Grand Reef</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="jellyshroom_caves" %}">Jellyshroom Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest" %}">Kelp Forest</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest_caves" %}">Kelp Forest Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="sea_treaders_path" %}">Sea Treader"s Path</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="sea_treaders_tunnel_caves" %}">Sea Treader"s Tunnel Caves</a></li>
+                </ul>
+            </div>
+            
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/garryfish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="garryfish" %}">Garryfish</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="crash_zone_mesas" %}">Crash Zone Mesas</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest" %}">Kelp Forest</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest_caves" %}">Kelp Forest Caves</a></li>
+                    <li><a href="{% url "Subnautica:biome_view" biome_name="mountains" %}">Mountains</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/gasopod.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/gasopod.html">Gasopod</a>
+                </div>
+                <p class="item_desc">
+                    Defensive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/crash_zone_mesas.html">Crash Zone Mesas</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/safe_shallows.html">Safe Shallows</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/ghost_lev.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/ghost_lev.html">Ghost Leviathan</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/crater_edge.html">Crater Edge</a></li>
+                    <li><a href="Biomes/grand_reef.html">Grand Reef</a></li>
+                    <li><a href="Biomes/blood_kelp_zone.html">Blood Kelp Zone</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/ghost_ray.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/ghost_ray.html">Ghost Ray</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/lost_river.html">Lost River</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/holefish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/holefish.html">Holefish</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/bulb_zone_caves.html">Bulb Zone Caves</a></li>
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/mushroom_forest_caves.html">Mushroom Forest Caves</a></li>
+                    <li><a href="Biomes/safe_shallows.html">Safe Shallows</a></li>
+                    <li><a href="Biomes/safe_shallows_caves.html">Safe Shallows Caves</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/hoopfish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/hoopfish.html">Hoopfish</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/bulb_zone.html">Bulb Zone</a></li>
+                    <li><a href="Biomes/crag_field.html">Crag Field</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/grand_reef.html">Grand Reef</a></li>
+                    <li><a href="Biomes/grassy_plateaus.html">Grassy Plateaus</a></li>
+                    <li><a href="Biomes/kelp_forest.html">Kelp Forest</a></li>
+                    <li><a href="Biomes/kelp_forest_caves.html">Kelp Forest Caves</a></li>
+                    <li><a href="Biomes/mountains.html">Mountains</a></li>
+                    <li><a href="Biomes/sea_treaders_path.html">Sea Treader"s Path</a></li>
+                    <li><a href="Biomes/sea_treaders_tunnel_caves.html">Sea Treader"s Tunnel Caves</a></li>
+                    <li><a href="Biomes/underwater_islands.html">Underwater Islands</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/hoverfish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/hoverfish.html">Hoverfish</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/crash_zone_mesas.html">Crash Zone Mesas</a></li>
+                    <li><a href="Biomes/kelp_forest.html">Kelp Forest</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/jelly_ray.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/jellyray.html">Jellyray</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/deep_grand_reef.html">Deep Grand Reef</a></li>
+                    <li><a href="Biomes/mushroom_forest.html">Mushroom Forest</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/lava_lizard.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/lava_lizard.html">Lava Lizard</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/inactive_lava_zone_corridor.html">Inactive Lava Zone Corridor</a></li>
+                    <li><a href="Biomes/inactive_lava_zone.html">Inactive Lava Zone</a></li>
+                    <li><a href="Biomes/lava_lakes.html">Lava Lakes</a></li>
+                    <li><a href="Biomes/lava_castle.html">Lava Castle</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/lava_larva.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/lava_larva.html">Lava Larva</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/inactive_lava_zone.html">Inactive Lava Zone</a></li>
+                    <li><a href="Biomes/inactive_lava_zone_corridor.html">Inactive Lava Zone Corridor</a></li>
+                    <li><a href="Biomes/lava_lakes.html">Lava Lakes</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/magmarang.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/magmarang.html">Magmarang</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/inactive_lava_zone.html">Inactive Lava Zone</a></li>
+                    <li><a href="Biomes/inactive_lava_zone_corridor.html">Inactive Lava Zone Corridor</a></li>
+                    <li><a href="Biomes/lava_lakes.html">Lava Lakes</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/mesmer.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/mesmer.html">Mesmer</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/bulb_zone.html">Bulb Zone</a></li>
+                    <li><a href="Biomes/crag_field.html">Crag Field</a></li>
+                    <li><a href="Biomes/kelp_forest_caves.html">Kelp Forest Caves</a></li>
+                    <li><a href="Biomes/lost_river.html">Lost River</a></li>
+                    <li><a href="Biomes/mushroom_forest.html">Mushroom Forest</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/oculus.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/oculus.html">Oculus</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/jellyshroom_caves.html">Jellyshroom Caves</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/peeper.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/peeper.html">Peeper</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/bulb_zone.html">Bulb Zone</a></li>
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/crash_zone_mesas.html">Crash Zone Mesas</a></li>
+                    <li><a href="Biomes/deep_sparse_reef.html">Deep Sparse Reef</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/grand_reef.html">Grand Reef</a></li>
+                    <li><a href="Biomes/grassy_plateaus.html">Grassy Plateaus</a></li>
+                    <li><a href="Biomes/kelp_forest.html">Kelp Forest</a></li>
+                    <li><a href="Biomes/mountains.html">Mountains</a></li>
+                    <li><a href="Biomes/mushroom_forest.html">Mushroom Forest</a></li>
+                    <li><a href="Biomes/safe_shallows.html">Safe Shallows</a></li>
+                    <li><a href="Biomes/sea_treaders_path.html">Sea Treader"s Path</a></li>
+                    <li><a href="Biomes/sparse_reef.html">Sparse Reef</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/rabbit_ray.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/rabbit_ray.html">Rabbit Ray</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/crash_zone_mesas.html">Crash Zone Mesas</a></li>
+                    <li><a href="Biomes/kelp_forest.html">Kelp Forest</a></li>
+                    <li><a href="Biomes/safe_shallows.html">Safe Shallows</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/red_eyeye.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/red_eyeye.html">Red Eyeye</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/inactive_lava_zone.html">Inactive Lava Zone</a></li>
+                    <li><a href="Biomes/inactive_lava_zone_corridor.html">Inactive Lava Zone Corridor</a></li>
+                    <li><a href="Biomes/lava_lakes.html">Lava Lakes</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/reginald.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/reginald.html">Reginald</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/crash_zone_mesas.html">Crash Zone Mesas</a></li>
+                    <li><a href="Biomes/deep_sparse_reef.html">Deep Sparse Reef</a></li>
+                    <li><a href="Biomes/grand_reef.html">Grand Reef</a></li>
+                    <li><a href="Biomes/grand_reef_caves.html">Grand Reef Caves</a></li>
+                    <li><a href="Biomes/grassy_plateaus.html">Grassy Plateaus</a></li>
+                    <li><a href="Biomes/lost_river.html">Lost River</a></li>
+                    <li><a href="Biomes/mountains.html">Mountains</a></li>
+                    <li><a href="Biomes/mountains_caves.html">Mountains Caves</a></li>
+                    <li><a href="Biomes/sea_treaders_path.html">Sea Treader"s Path</a></li>
+                    <li><a href="Biomes/sparse_reef.html">Sparse Reef</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/reefback_lev.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/reefback_lev.html">Reefback Leviathan</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/blood_kelp_zone.html">Blood Kelp Zone</a></li>
+                    <li><a href="Biomes/bulb_zone.html">Bulb Zone</a></li>
+                    <li><a href="Biomes/crag_field.html">Crag Field</a></li>
+                    <li><a href="Biomes/grassy_plateaus.html">Grassy Plateaus</a></li>
+                    <li><a href="Biomes/mushroom_forest.html">Mushroom Forest</a></li>
+                    <li><a href="Biomes/sparse_reef.html">Sparse Reef</a></li>
+                    <li><a href="Biomes/underwater_islands.html">Underwater Islands</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/river_prowler.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/river_prowler.html">River Prowler</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/lost_river.html">Lost River</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/rockgrub.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/rockgrub.html">Rockgrub</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/bulb_zone_caves.html">Bulb Zone Caves</a></li>
+                    <li><a href="Biomes/deep_sparse_reef.html">Deep Sparse Reef</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/dunes_caves.html">Dunes Caves</a></li>
+                    <li><a href="Biomes/grassy_plateaus_caves.html">Grassy Plateaus Caves</a></li>
+                    <li><a href="Biomes/mountains_caves.html">Mountains Caves</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/reaper_lev.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/reaper_lev.html">Reaper Leviathan</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/bulb_zone.html">Bulb Zone</a></li>
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/crash_zone_mesas.html">Crash Zone Mesas</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/mountains.html">Mountains</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/sea_dragon_lev.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/sea_dragon_lev.html">Sea Dragon Leviathan</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/inactive_lava_zone.html">Inactive Lava Zone</a></li>
+                    <li><a href="Biomes/lava_lakes.html">Lava Lakes</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/sea_emperor_lev.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/sea_emperor_lev.html">Sea Emperor Leviathan</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/lava_castle.html">Lava Castle</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/sea_treader_lev.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/sea_treader_lev.html">Sea Treader Leviathan</a>
+                </div>
+                <p class="item_desc">
+                    Defensive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/grand_reef.html">Grand Reef</a></li>
+                    <li><a href="Biomes/sea_treaders_path.html">Sea Treader"s Path</a></li>
+                    <li><a href="Biomes/sea_treaders_tunnel_caves.html">Sea Treader"s Tunnel Caves</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/sand_shark.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/sand_shark.html">Sand Shark</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/grassy_plateaus.html">Grassy Plateaus</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/skyray.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/skyray.html">Skyray</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/floating_island.html">Floating Island</a></li>
+                    <li><a href="Biomes/mountain_island.html">Mountain Island</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/spadefish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/spadefish.html">Spadefish</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/deep_sparse_reef.html">Deep Sparse Reef</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/grand_reef.html">Grand Reef</a></li>
+                    <li><a href="Biomes/grassy_plateaus.html">Grassy Plateaus</a></li>
+                    <li><a href="Biomes/mushroom_forest.html">Mushroom Forest</a></li>
+                    <li><a href="Biomes/mushroom_forest_caves.html">Mushroom Forest Caves</a></li>
+                    <li><a href="Biomes/sea_treaders_path.html">Sea Treader"s Path</a></li>
+                    <li><a href="Biomes/sea_treaders_tunnel_caves.html">Sea Treader"s Tunnel Caves</a></li>
+                    <li><a href="Biomes/sparse_reef.html">Sparse Reef</a></li>
+                    <li><a href="Biomes/underwater_islands.html">Underwater Islands</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/spinefish.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/spinefish.html">Spinefish</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/blood_kelp_caves.html">Blood Kelp Caves</a></li>
+                    <li><a href="Biomes/blood_kelp_zone.html">Blood Kelp Zone</a></li>
+                    <li><a href="Biomes/lost_river.html">Lost River</a></li>
+                    <li><a href="Biomes/bone_fields_caves.html">Bone Fields Caves</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/stalker.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/stalker.html">Stalker</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/kelp_forest.html">Kelp Forest</a></li>
+                    <li><a href="Biomes/kelp_forest_caves.html">Kelp Forest Caves</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/shuttlebug.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/shuttlebug.html">Shuttlebug</a>
+                </div>
+                <p class="item_desc">
+                    Passive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/bulb_zone.html">Bulb Zone</a></li>
+                    <li><a href="Biomes/crag_field.html">Crag Field</a></li>
+                    <li><a href="Biomes/crash_zone.html">Crash Zone</a></li>
+                    <li><a href="Biomes/deep_sparse_reef.html">Deep Sparse Reef</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/dunes_caves.html">Dunes Caves</a></li>
+                    <li><a href="Biomes/grassy_plateaus_caves.html">Grassy Plateaus Caves</a></li>
+                    <li><a href="Biomes/mountains.html">Mountains</a></li>
+                    <li><a href="Biomes/mountains_caves.html">Mountains Caves</a></li>
+                    <li><a href="Biomes/mushroom_forest_caves.html">Mushroom Forest Caves</a></li>
+                    <li><a href="Biomes/safe_shallows_caves.html">Safe Shallows Caves</a></li>
+                    <li><a href="Biomes/sea_treaders_path.html">Sea Treader"s Path</a></li>
+                    <li><a href="Biomes/sea_treaders_tunnel_caves.html">Sea Treader"s Tunnel Caves</a></li>
+                    <li><a href="Biomes/sparse_reef.html">Sparse Reef</a></li>
+                </ul>
+            </div>
+
+            <!-------------------------------------------->
+            <div class="item">
+                <div class="vehicle_pic">
+                    <img src="{% static "img/Fauna/warper.webp" %}" alt="fauna image" class="item_img" />
+                    <a class="item_name" href="Faunas/warper.html">Warper</a>
+                </div>
+                <p class="item_desc">
+                    Aggressive
+                </p>
+                <ul class="biome_resources">
+                    <li><a href="Biomes/blood_kelp_caves.html">Blood Kelp Caves</a></li>
+                    <li><a href="Biomes/blood_kelp_zone.html">Blood Kelp Zone</a></li>
+                    <li><a href="Biomes/deep_grand_reef.html">Deep Grand Reef</a></li>
+                    <li><a href="Biomes/dunes.html">Dunes</a></li>
+                    <li><a href="Biomes/grand_reef.html">Grand Reef</a></li>
+                    <li><a href="Biomes/inactive_lava_zone.html">Inactive Lava Zone</a></li>
+                    <li><a href="Biomes/inactive_lava_zone_corridor.html">Inactive Lava Zone Corridor</a></li>
+                    <li><a href="Biomes/lava_lakes.html">Lava Lakes</a></li>
+                    <li><a href="Biomes/lost_river.html">Lost River</a></li>
+                    <li><a href="Biomes/mountain_island.html">Mountain Island</a></li>
+                    <li><a href="Biomes/sea_treaders_path.html">Sea Treader"s Path</a></li>
+                </ul>
+            </div>
+        </section>
+    </div>
+{% endblock %}

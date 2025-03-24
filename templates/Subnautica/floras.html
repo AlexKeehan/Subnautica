@@ -1,0 +1,62 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+{% load link_filter %}
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/list.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+
+    <div class="info_main_wrapper">
+            <section class="ex_info_section">
+                <h2 class="ex_title">Floras</h2>
+                <p class="ex_info">
+                    The <a href="biomes.html">Biomes</a> on Planet 4546B support a variety of vibrant plant-life,
+                    which can range from luminous <a href="{% url "Subnautica:flora_view" flora_name="acid_mushroom" %}">Acid Mushroom</a> to the
+                    ominous <a href="{% url "Subnautica:flora_view" flora_name="giant_cove_tree" %}">Giant Cove Tree</a>.
+                </p>
+            </section>
+            <section class="ex_pic_section">
+                <h3 class="ex_pic_title">Bloodroot</h3>
+                <img src="{% static "img/Flora/bloodroot.webp" %}" alt="example flora" class="ex_pic" />
+                <a href="{% url "Subnautica:flora_view" flora_name="bloodroot" %}" class="ex_link">Bloodroot</a>
+            </section>
+    </div>
+    <div class="list_main_wrapper">
+        <section class="list_title_wrapper">
+            <h4 class="list_title">Floras</h4>
+        </section>
+
+        <section class="item_list">
+            <!-------------------------------------------->
+            <div class="list_header">
+                <p>Flora</p>
+                <p>Use</p>
+                <p>Biome</p>
+                <p>Growth Time</p>
+            </div>
+
+            <!-------------------------------------------->
+            {% for flora in floras_list %}
+            <div class="item">
+                <div class="item_pic">
+                    <img src="{% static 'img/Flora/' %}{{ flora.get_img_name }}" alt="{{ flora.flora }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:flora_view' flora_name=flora.get_flora_url %}">{{ flora.flora }}</a>
+                </div>
+                <p class="item_desc">
+                    {{ flora.use }}
+                </p>
+                <ul class="biome_resources">
+                    {% for biome in flora.biome %}
+                    <li><a href="{{ biome.url }}">{{ biome.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                <ul class="depth_range">
+                    <li><a>{{ flora.growth_time }}</a></li>
+                </ul>
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}

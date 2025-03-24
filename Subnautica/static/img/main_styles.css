@@ -1,0 +1,262 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    font-family: 'Times New Roman', serif;
+    /* Source for background image: https://alphacoders.com/subnautica-wallpapers*/
+    background: url("../background.jpg") no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    min-height: 100%;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em .5em;
+    position: relative;
+    background-color: rgba(39, 206, 245, 0.5);
+    max-width: 65%;
+    margin: 0 auto;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.header_left {
+    display: flex;
+    align-items: center;
+}
+
+.logo_wrapper, .title_wrapper {
+    text-decoration: none;
+}
+
+.logo {
+    height: 6em;
+    margin-right: 2.2em;
+}
+
+.title {
+    font-size: 3.0em;
+    color: black;
+    font-family: "Open Sans", serif;
+}
+
+.header_center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header_center ul {
+    padding-top: 3em;
+}
+
+.header_center li a {
+    color: white;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.4em;
+    padding-top: 1.4em;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    font-size: 1.2em;
+}
+
+.search_form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.search_bar {
+    padding: .2em;
+    font-size: 0.9em;
+    width: 100%;
+    border-radius: 5px;
+    height: 100%;
+}
+
+.suggestions {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border-radius: 1em;
+    background-color: white;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.suggestions ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.suggestions ul li {
+    padding: .4em;
+    cursor: pointer;
+}
+
+.search_button {
+    height: 100%;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+.header_right {
+    position: absolute;
+    right: .2em;
+    font-size: 1.1em;
+}
+
+.header_right li {
+    list-style-type: none;
+    padding-bottom: .4em;
+}
+
+.login, .signup {
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 .2em .4em rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.login {
+    background-color: rgba(51, 117, 56, 0.8);
+    padding: .3em;
+}
+
+.signup {
+    background-color: rgba(93, 168, 153, 0.8);
+}
+
+.main_wrapper {
+    max-width: 100%;
+    width: 65%;
+    margin: 0 auto;
+    padding: 1.5em;
+    background-color:rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    flex: 1;
+}
+
+.left_bar, .right_bar {
+    width: 17.5%;
+    font-size: 1.4em;
+}
+
+.left_bar ul, .right_bar ul {
+    padding: 0;
+    list-style-type: none;
+    margin-bottom: 4em;
+}
+
+.left_bar ul a, .right_bar ul a {
+    color: white;
+}
+
+.left_bar li, .right_bar li {
+    margin-bottom: .8em;
+}
+
+.left_bar li a, .right_bar li a{
+    text-decoration: none;
+}
+
+.socials_list li {
+    margin-bottom: .3em;
+    margin-left: 1em;
+    list-style-type: disc;
+    list-style-position: inside;
+    font-size: 0.75em;
+}
+
+.socials_list li::marker {
+    color: rgba(39, 206, 245, 0.8);
+}
+
+.socials_list li a {
+    text-decoration: underline;
+    color: rgba(5, 137, 156, 0.8);
+}
+
+.socials_list a:hover {
+    color: #0056b3;
+}
+
+.right_bar li a {
+    background-color: rgba(39, 206, 245, 0.5);
+    box-shadow: 0 .2em .4em rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.main_content {
+    width: 80%;
+    padding: 1em;
+    border-radius: 10px;
+}
+
+h2 {
+    font-size: 2em;
+    text-align: left;
+    color: white;
+    padding-bottom: 1.5em;
+}
+
+.main_layout {
+    display: flex;
+    margin-top: 1em;
+}
+
+.main_para {
+    font-size: 1.2em;
+    color: white;
+}
+
+footer {
+    justify-content: space-between;
+    width: 100%;
+    padding: 2em 0;
+    background-color: rgba(39, 206, 245, 0.5);
+    left: 0;
+    margin-top: auto;
+}
+
+.footer_content {
+    display:flex;
+    align-content:space-between;
+}
+
+.help {
+    font-size: 1.5em;
+}
+
+.help a {
+    color: black;
+}

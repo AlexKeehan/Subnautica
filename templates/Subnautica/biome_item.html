@@ -1,0 +1,127 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/list.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/item.css" %}" />
+{% endblock %}
+
+{% block main_wrapper %}
+    <!--Main section with biome info-->
+    <div class="info_main_wrapper">
+        <section class="ex_info_section">
+            <h2 class="ex_title">{{ biome.biome }}</h2>
+            <p class="ex_info">
+                {{ biome.description|safe }}
+            </p>
+        </section>
+
+        <!--Section for biome picture and basic information-->
+        <section class="ex_pic_section">
+            <h3 class="ex_pic_title">{{ biome.biome}}</h3>
+            <img src="{% static biome.get_img_path %}" alt="example biome" class="ex_pic" />
+
+            <section class="item_info_wrapper">
+                <ul class="item_category">
+                    <li>Category</li>
+                    <li><a href="{% url "subnautica:biomes_view" %}" class="item_category_text">Biome</a></li>
+                </ul>
+                <ul class="item_type">
+                    <li>Type</li>
+                    <li><a class="item_type_text">{{  biome.biome_type }}</a></li>
+                </ul>
+                <ul class="item_depth_range">
+                    <li>Depth Range</li>
+                    <li><a class="item_depth_range_text">{{ biome.depth_range}}</a></li>
+                </ul>
+                <ul class="item_temp_range">
+                    <li>Temperature Range</li>
+                    <li><a class="item_temp_range_text">{{ biome.temp_range }}</a></li>
+                </ul>
+                <ul class="item_resources">
+                    <li>Resources</li>
+                    {% for resource in biome.resources %}
+                    <li><a href="{{ resource.url }}" class="item_resources_text">{{ resource.name }}</a></li>
+                {% endfor %}
+                </ul>
+
+            </section>
+        </section>
+    </div>
+
+    <!--Section for comments with nested replies-->
+    <div class="comment_main_wrapper">
+        <section class="comment_title_wrapper">
+            <h4 class="comment_title">Comments</h4>
+        </section>
+        <!--Comment-->
+        <section class="comment_list">
+            <div class="comment_wrapper">
+                <div class="comment">
+                    <div class="user_info">
+                        <img src="{% static "img/profile_pic.jpg" %}" alt="profile picture" class="profile_pic" />
+                        <span class="username">Username</span>
+                    </div>
+
+                    <div class="comment_content">
+                        <p class="comment_text">Great early game biome to explore</p>
+                        <span class="comment_date">Posted on: Feb 18, 2025</span>
+                    </div>
+
+                    <div class="reply_icon_wrapper">
+                        <img src="{% static "img/reply_icon.jpg" %}" alt="reply icon" class="reply_icon" />
+                    </div>
+                </div>
+
+                <!--Replies-->
+
+                <div class="reply_wrapper">
+                    <div class="reply">
+                        <div class="user_info">
+                            <img src="{% static "img/reply_icon.jpg" %}" alt="profile picture" class="profile_pic" />
+                            <span class="username">Reply Username</span>
+                        </div>
+
+                        <div class="comment_content">
+                            <p class="comment_text">I agree!</p>
+                            <span class="comment_date">Posted on: Feb 19, 2025</span>
+                        </div>
+                    </div>
+
+                    <div class="reply_wrapper">
+                        <div class="reply">
+                            <div class="user_info">
+                                <img src="{% static "img/profile_pic.jpg" %}" alt="profile picture" class="profile_pic" />
+                                <span class="username">Reply Username</span>
+                            </div>
+
+                            <div class="comment_content">
+                                <p class="comment_text">I hate this biome!</p>
+                                <span class="comment_date">Posted on: Feb 19, 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comment">
+                    <div class="user_info">
+                        <img src="{% static "img/profile_pic.jpg" %}" alt="profile picture" class="profile_pic" />
+                        <span class="username">Username</span>
+                    </div>
+
+                    <div class="comment_content">
+                        <p class="comment_text">Had some great memories here when I first started playing. Love the environment, especially at night!</p>
+                        <span class="comment_date">Posted on: Feb 18, 2025</span>
+                    </div>
+
+                    <div class="reply_icon_wrapper">
+                        <img src="{% static "img/reply_icon.jpg" %}" alt="reply icon" class="reply_icon" />
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+    </div>
+{% endblock %}

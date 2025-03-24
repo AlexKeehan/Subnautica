@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>index</title>
+    <link {% block css_styling %}rel="stylesheet" href="{% static "css/main.css" %}" />
+    <link rel="stylesheet" href="{% static "css/item.css" %}" />
+    <link rel="stylesheet" href="{% static "css/list.css" %}" {% endblock %}/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="background_img"></div>
+
+    <!--Same header as always-->
+    <header>
+        <div class="header_left">
+            <!--Source for game logo: https://subnautica.fandom.com/wiki/Subnautica_Wiki-->
+            <a href="../index.html" class="logo_wrapper">
+                <img src="../subnautica_logo.webp" alt="logo" class="logo" />
+            </a>
+            <a href="../index.html" class="title_wrapper">
+                <h1 class="title">Subnautica</h1>
+            </a>
+        </div>
+        <div class="header_center">
+            <form action="../search_results.html" method="get" class="search_form">
+                <input type="text" name="query" placeholder="Search For 'lava'" class="search_bar" id="search_bar"/>
+                <button type="submit" class="search_button">Search</button>
+            </form>
+            <!-- Dropdown for suggested search results-->
+            <div id="suggested_results" class="suggestions"></div>
+            <nav>
+                <ul>
+                    <li><a href="../tools.html">Tools</a></li>
+                    <li><a href="../vehicles.html">Vehicles</a></li>
+                    <li><a href="../biomes.html">Biomes</a></li>
+                    <li><a href="../floras.html">floras</a></li>
+                    <li><a href="../faunas.html">faunas</a></li>
+                    <li><a href="../eggs.html">Eggs</a></li>
+                    <li><a href="../resources.html">Resources</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="header_right">
+            <ul>
+                <li><a href="../login.html" class="login">Login</a></li>
+                <li><a href="../signup.html" class="signup">Signup</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!--Main section with biome info-->
+    <div class="info_main_wrapper">
+        <section class="ex_info_section">
+            <h2 class="ex_title">Safe Shallows</h2>
+            <p class="ex_info">
+                The Safe Shallows is the starter biome for new players and contains sprawling coral reefs and small cave systems.
+                As the name implies, this shallow biome is one of the safest in the game, with no predatory creatures. However, there are environmental hazards and it is quite easy to be disoriented by the winding caves and run out of oxygen.
+                Some predators can wander into this biome from the <a href="kelp_forest.html">Kelp Forest</a> and <a href="grassy_plateaus.html">Grassy Plateaus</a>.
+                <br /><br />
+                This biome offers plentiful diving experiences for new players, with a variety of floras, faunas, and resources. At night time, this biome truly shows its alien nature with plentiful bioluminescence.
+            </p>
+        </section>
+        <!--Section for biome picture and basic information-->
+        <section class="ex_pic_section">
+            <h3 class="ex_pic_title">Safe Shallows</h3>
+            <img src="Biome%20Images/safe_shallows.webp" alt="example biome" class="ex_pic" />
+
+            <section class="item_info_wrapper">
+                <ul class="item_category">
+                    <li>Category</li>
+                    <li><a href="../biomes.html" class="item_category_text">Biome</a></li>
+                </ul>
+                <ul class="item_type">
+                    <li>Type</li>
+                    <li><a class="item_type_text">Surface</a></li>
+                </ul>
+                <ul class="item_depth_range">
+                    <li>Depth Range</li>
+                    <li><a class="item_depth_range_text">0 - 80 meters</a></li>
+                </ul>
+                <ul class="item_temp_range">
+                    <li>Temperature Range</li>
+                    <li><a class="item_temp_range_text">26.5&deg;C-32&deg;C</a></li>
+                </ul>
+                <ul class="item_resources">
+                    <li>Resources</li>
+                    <li><a href="../floras/acid_mushroom.html">Acid Mushroom</a></li>
+                    <li><a href="../Resources/copper_ore.html">Copper Ore</a></li>
+                    <li><a href="../floras/coral_tube_sample.html">Coral Tube Sample</a></li>
+                    <li><a href="../Resources/gas_pod.html">Gas Pod</a></li>
+                    <li><a href="../faunas/gasopod.html">Gasopod Egg</a></li>
+                    <li><a href="../Resources/gold.html">Gold</a></li>
+                    <li><a href="../Resources/lead.html">Lead</a></li>
+                    <li><a href="../Resources/metal_salvage.html">Metal Salvage</a></li>
+                    <li><a href="../Resources/quartz.html">Quartz</a></li>
+                    <li><a href="../faunas/rabbit_ray.html">Rabbit Ray Egg</a></li>
+                    <li><a href="../Resources/silver_ore.html">Silver Ore</a></li>
+                    <li><a href="../floras/table_coral_sample.html">Table Coral Sample</a></li>
+                    <li><a href="../Resources/titanium.html">Titanium</a></li>
+                </ul>
+
+            </section>
+        </section>
+    </div>
+
+    <!--Section for comments with nested replies-->
+    <div class="comment_main_wrapper">
+        <section class="comment_title_wrapper">
+            <h4 class="comment_title">Comments</h4>
+        </section>
+        <!--Comment-->
+        <section class="comment_list">
+            <div class="comment_wrapper">
+                <div class="comment">
+                    <div class="user_info">
+                        <img src="../profile_pic.jpg" alt="profile picture" class="profile_pic" />
+                        <span class="username">Username</span>
+                    </div>
+
+                    <div class="comment_content">
+                        <p class="comment_text">Great early game biome to explore</p>
+                        <span class="comment_date">Posted on: Feb 18, 2025</span>
+                    </div>
+
+                    <div class="reply_icon_wrapper">
+                        <img src="../reply_icon.jpg" alt="reply icon" class="reply_icon" />
+                    </div>
+                </div>
+
+                <!--Replies-->
+
+                <div class="reply_wrapper">
+                    <div class="reply">
+                        <div class="user_info">
+                            <img src="../profile_pic.jpg" alt="profile picture" class="profile_pic" />
+                            <span class="username">Reply Username</span>
+                        </div>
+
+                        <div class="comment_content">
+                            <p class="comment_text">I agree!</p>
+                            <span class="comment_date">Posted on: Feb 19, 2025</span>
+                        </div>
+                    </div>
+
+                    <div class="reply_wrapper">
+                        <div class="reply">
+                            <div class="user_info">
+                                <img src="../profile_pic.jpg" alt="profile picture" class="profile_pic" />
+                                <span class="username">Reply Username</span>
+                            </div>
+
+                            <div class="comment_content">
+                                <p class="comment_text">I hate this biome!</p>
+                                <span class="comment_date">Posted on: Feb 19, 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comment">
+                    <div class="user_info">
+                        <img src="../profile_pic.jpg" alt="profile picture" class="profile_pic" />
+                        <span class="username">Username</span>
+                    </div>
+
+                    <div class="comment_content">
+                        <p class="comment_text">Had some great memories here when I first started playing. Love the environment, especially at night!</p>
+                        <span class="comment_date">Posted on: Feb 18, 2025</span>
+                    </div>
+
+                    <div class="reply_icon_wrapper">
+                        <img src="../reply_icon.jpg" alt="reply icon" class="reply_icon" />
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+    </div>
+    <footer>
+        <div class="footer_content">
+            <img src="../subnautica_logo.webp" alt="logo" class="logo" />
+            <h1 class="title">Subnautica</h1>
+        </div>
+        <div class="help">
+            <a href="help.html">Help</a>
+        </div>
+    </footer>
+    <script src="../JavaScript/search_script.js"></script>
+Resources%20Images
+</html>

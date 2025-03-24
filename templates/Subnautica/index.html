@@ -1,0 +1,112 @@
+{%  load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>index</title>
+    <link {% block css_styling %} rel="stylesheet" href="{% static "css/main.css" %}" {%  endblock %}/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- Set background img -->
+    <div class="background_img"></div>
+
+    <!-- Main Header -->
+    <header>
+        <!-- Split it in three for better styling-->
+        <!-- Left side has title & logo-->
+        <div class="header_left">
+            <!-- Source for game logo: https://subnautica.fandom.com/wiki/Subnautica_Wiki -->
+            <a href="{% url "Subnautica:subnautica_view" %}" class="logo_wrapper">
+                <img src="{% static "img/subnautica_logo.webp" %}" alt="logo" class="logo" />
+            </a>
+            <a href="{% url "Subnautica:subnautica_view" %}" class="title_wrapper">
+                <h1 class="title">Subnautica</h1>
+            </a>
+        </div>
+        <!-- Middle has search bar and navigation options-->
+        <div class="header_center">
+            <form action="search_results.html" method="get" class="search_form">
+                <input type="text" name="query" placeholder="Search For 'lava'" class="search_bar" id="search_bar"/>
+                <button type="submit" class="search_button">Search</button>
+            </form>
+            <!-- Dropdown for suggested search results-->
+            <div id="suggested_results" class="suggestions"></div>
+            <nav>
+                <ul>
+                    <li><a href="{%  url "Subnautica:tools_view" %}">Tools</a></li>
+                    <li><a href="{%  url "Subnautica:vehicles_view" %}">Vehicles</a></li>
+                    <li><a href="{% url "Subnautica:biomes_view" %}">Biomes</a></li>
+                    <li><a href="{%  url "Subnautica:floras_view" %}">Floras</a></li>
+                    <li><a href="{%  url "Subnautica:faunas_view" %}">Faunas</a></li>
+                    <li><a href="{% url "Subnautica:eggs_view" %}">Eggs</a></li>
+                    <li><a href="{% url "Subnautica:resources_view" %}">Resources</a></li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Right has login & signup options-->
+        <div class="header_right">
+            <ul>
+                <li><a href="{% url "Subnautica:login_view" %}" class="login">Login</a></li>
+                <li><a href="{% url "Subnautica:signup_view" %}" class="signup">Signup</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main wrapper for main content-->
+    <div {% block main_wrapper %} class="main_wrapper">
+        <main class="main_layout">
+            <!-- Split main content into three-->
+            <!-- Left contains socials-->
+            <div class="left_bar">
+                <ul>
+                    <li>
+                        <a>Socials</a>
+                        <ul class="socials_list">
+                            <li><a href="https://www.youtube.com/user/subnautica">Youtube</a></li>
+                            <li><a href="https://discord.com/invite/subnautica">Discord</a></li>
+                            <li><a href="https://www.reddit.com/r/subnautica/">Reddit</a></li>
+                            <li><a href="https://x.com/subnautica?mx=2">Twitter</a></li>
+                            <li><a href="https://www.facebook.com/subnautica">Facebook</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- Middle contains main paragraph-->
+            <div class="main_content">
+                <h2>About Subnautica</h2>
+                <p class="main_para">
+                    The Subnautica games are a series of open-world exploration based survival games developed and published by Unknown Worlds Entertainment.
+                    This game is set in the far future on the fictional Planet 4546B and follows the player who crash landed on this planet and is now attempting to return back to civilization.
+                    The player will have to uncover the secrets of this planet if they hope to escape, all while surviving the deadly environment and hostile creatures.
+                </p>
+            </div>
+            <!-- Right has quick links-->
+            <div class="right_bar">
+                <ul>
+                    <li><a href="https://www.subnautica.com/en">Play Now</a></li>
+                    <li><a href="https://forums.unknownworlds.com/categories/subnautica-general-discussion">Forums</a></li>
+                    <li><a href="https://www.deviantart.com/tag/subnautica">Fan Art</a></li>
+                    <li><a href="https://subnautica.fandom.com/wiki/Update_History_(Subnautica)">Updates</a></li>
+                    <li><a href="help.html">Help</a></li>
+                </ul>
+            </div>
+        </main>
+
+    </div>
+    {% endblock %}
+
+    <!-- Add footer-->
+    <footer>
+        <div class="footer_content">
+            <img src="{% static "img/subnautica_logo.webp" %}" alt="logo" class="logo" />
+            <h1 class="title">Subnautica</h1>
+        </div>
+    </footer>
+
+    <script src=" {% static "js/search_script.js" %}"></script>
+</body>
+</html>
