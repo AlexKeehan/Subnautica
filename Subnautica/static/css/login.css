@@ -1,0 +1,42 @@
+.login_wrapper {
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_layout {
+    background-color: rgba(39, 206, 245, 0.5);
+    border-radius: 10px;
+    padding: 2em;
+    text-align: center;
+    box-shadow: 0 .2em .4em rgba(0, 0, 0, 0.2);
+    width: 25%;
+}
+
+.textbox {
+    margin: 1em 0;
+}
+
+.textbox input {
+    width: 100%;
+    padding: .6em;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 5);
+    box-sizing: border-box;
+    font-size: 1.0em;
+}
+
+.submit_button button {
+    width: 25%;
+    padding: .5em;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.error_msg {
+    font-size: 1.5em;
+    color: white;
+    padding-top: .8em;
+}

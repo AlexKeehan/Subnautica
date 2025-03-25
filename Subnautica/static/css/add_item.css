@@ -1,0 +1,76 @@
+.add_item_wrapper {
+    max-width: 65%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2em;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 .2em .4em rgba(0, 0, 0, 0.2);
+    height: 100%;
+    min-width: 65%;
+}
+
+.add_item_layout {
+    width: 50%;
+    padding-right: 2em;
+}
+
+h1 {
+    color: white;
+    text-align: left;
+}
+
+.add_item_info_section {
+    width: 50%;
+    text-align: left;
+    font-size: 1.4em;
+}
+
+.input_info {
+    margin-bottom: .8em;
+}
+
+.input_info label {
+    padding-top: .4em;
+    font-size: 1.0em;
+    display: block;
+    color: white;
+}
+
+.input_info input, .input_info textarea {
+    width: 100%;
+    border-radius: 5px;
+    padding: .5em;
+    border: 1px solid rgba(39, 206, 245, 0.5);
+    font-size: .6em;
+}
+
+.submit_button {
+    height: 75%;
+    width: 75%;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.image_section {
+    width: 45%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.placeholder_img {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 2px solid rgba(39, 206, 245, 0.5);
+}

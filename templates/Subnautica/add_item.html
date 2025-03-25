@@ -1,0 +1,63 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/add_item.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+    <html class="add_item_page"></html>
+    <div class="add_item_wrapper">
+        <main class="add_item_layout">
+            <div class="add_item_info_section">
+                <h1>Add Item</h1>
+                <form id="add_item_form">
+                    <div class="input_info">
+                        <label for="item_name">Item Name: </label>
+                        <input type="text" id="item_name" name="item_name" placeholder="Enter Item Name">
+                    </div>
+                    <div class="input_info">
+                        <label for="item_cat">Item Category: </label>
+                        <input type="text" id="item_cat" name="item_cat" placeholder="Enter Item Category">
+                    </div>
+                    <div class="input_info">
+                        <label for="item_desc">Item Description: </label>
+                        <input type="text" id="item_desc" name="item_desc" placeholder="Enter Item Description">
+                    </div>
+                    <div class="input_info">
+                        <label for="item_headers">Item Headers: </label>
+                        <input type="text" id="item_headers" name="item_headers" placeholder="Enter Item Headers">
+                    </div>
+                    <div class="input_info">
+                        <label for="item_statistic">Item Statistic: </label>
+                        <input type="text" id="item_statistic" name="item_statistic" placeholder="Enter Statistic">
+                    </div>
+                    <div class="input_info">
+                        <label for="item_date">Item Date: </label>
+                        <input type="text" id="item_date" name="item_date" placeholder="Enter Item Date">
+                    </div>
+                    <div class="input_info">
+                        <label for="item_image">Item Image: </label>
+                        <input type="file" id="item_image" name="item_image" accept="image/*">
+                    </div>
+                    <!--Does nothing now, but will add items to database once implemented-->
+                    <div class="submit_button">
+                        <button type="submit" class="add_item_button">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <aside class="image_section">
+            <img src="{% static "img/placeholder_img.png" %}" alt="placeholder image" class="placeholder_img">
+        </aside>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{%  static "js/scripts.js" %}"></script>
+    <script>
+        app.imageDisplay();
+    </script>
+{% endblock %}

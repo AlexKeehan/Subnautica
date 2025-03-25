@@ -17,6 +17,13 @@ urlpatterns = [
     path('floras/', views.floras_view, name='floras_view'),
     path('floras/<str:flora_name>/', views.flora_view, name='flora_view'),
     path('eggs/', views.eggs_view, name='eggs_view'),
+    path('search/', views.search_view, name='search_view'),
     path('login/', views.login_view, name='login_view'),
+    path('logout/', views.logout_view, name='logout_view'),
     path('signup/', views.signup_view, name='signup_view'),
+    path('user_index/', views.user_index_view, name='user_index_view'),
+    path('admin_dashboard/', views.admin_user_view, name='admin_user_view'),
+    path('add_item/', views.add_item_view, name='add_item_view'),
+    path('edit_item/', views.edit_item_view, name='edit_item_view'),
+    path('del_item/', views.del_item_view, name='del_item_view'),
 ]

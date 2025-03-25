@@ -1,0 +1,63 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/login.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+    <div class="main_wrapper">
+        <main class="main_layout">
+            <!--Rearrange content for logged-in user index-->
+            <div class="main_content">
+                <h2>About Subnautica</h2>
+                <p class="main_para">
+                    The Subnautica games are a series of open-world exploration based survival games developed and published by Unknown Worlds Entertainment.
+                    This game is set in the far future on the fictional Planet 4546B and follows the player who crash-landed on this planet and is now attempting to return back to civilization.
+                    The player will have to uncover the secrets of this planet if they hope to escape, all while surviving the deadly environment and hostile creatures.
+                </p>
+            </div>
+            <div class="left_bar">
+                <ul>
+                    <li><a href="https://www.subnautica.com/en">Play Now</a></li>
+                    <li><a href="https://forums.unknownworlds.com/categories/subnautica-general-discussion">Forums</a></li>
+                    <li><a href="https://www.deviantart.com/tag/subnautica">Fan Art</a></li>
+                    <li><a href="https://subnautica.fandom.com/wiki/Update_History_(Subnautica)">Updates</a></li>
+                    <li><a href="help.html">Help</a></li>
+                </ul>
+                <ul>
+
+                    <li>
+                        <a>Socials</a>
+                        <ul class="socials_list">
+                            <li><a href="https://www.youtube.com/user/subnautica">Youtube</a></li>
+                            <li><a href="https://discord.com/invite/subnautica">Discord</a></li>
+                            <li><a href="https://www.reddit.com/r/subnautica/">Reddit</a></li>
+                            <li><a href="https://x.com/subnautica?mx=2">Twitter</a></li>
+                            <li><a href="https://www.facebook.com/subnautica">Facebook</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="right_bar">
+                <ul>
+                    <li>
+                        <a class="history_title">History</a>
+                        <ul class="history_list">
+                            <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Safe Shallows</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="activity_title">Activity</a>
+                        <ul class="activity_list">
+                            <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Username replied</a></li>
+                            <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Username replied</a></li>
+                            <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Username replied</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </main>
+    </div>
+{% endblock %}

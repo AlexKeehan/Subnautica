@@ -29,8 +29,8 @@
         </div>
         <!-- Middle has search bar and navigation options-->
         <div class="header_center">
-            <form action="search_results.html" method="get" class="search_form">
-                <input type="text" name="query" placeholder="Search For 'lava'" class="search_bar" id="search_bar"/>
+            <form action="{% url "Subnautica:search_view" %}" method="get" class="search_form">
+                <input type="text" name="query" placeholder="Search For 'blood'" class="search_bar" id="search_bar"/>
                 <button type="submit" class="search_button">Search</button>
             </form>
             <!-- Dropdown for suggested search results-->
@@ -50,8 +50,13 @@
         <!-- Right has login & signup options-->
         <div class="header_right">
             <ul>
-                <li><a href="{% url "Subnautica:login_view" %}" class="login">Login</a></li>
-                <li><a href="{% url "Subnautica:signup_view" %}" class="signup">Signup</a></li>
+                {% if request.session.username %}
+                    <li><a class="signup">{{ request.session.username }}</a></li>
+                    <li><a href="{% url "Subnautica:logout_view" %}" class="login">Log out</a></li>
+                {% else %}
+                    <li><a href="{% url "Subnautica:login_view" %}" class="login">Login</a></li>
+                    <li><a href="{% url "Subnautica:signup_view" %}" class="signup">Signup</a></li>
+                {% endif %}
             </ul>
         </div>
     </header>
@@ -110,3 +115,5 @@
     <script src=" {% static "js/search_script.js" %}"></script>
 </body>
 </html>
+
+{% block js %} {% endblock %}

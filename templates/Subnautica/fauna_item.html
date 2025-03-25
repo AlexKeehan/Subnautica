@@ -10,30 +10,37 @@
 {% block main_wrapper %}
     <div class="info_main_wrapper">
         <section class="ex_info_section">
-            <h2 class="ex_title">{{ tool.tool }}</h2>
+            <h2 class="ex_title">{{ fauna.fauna }}</h2>
             <p class="ex_info">
-                {{ tool.description|safe }}
+                {{ fauna.description|safe }}
             </p>
         </section>
 
-        <!--Section for tool picture and basic information-->
+        <!--Section for fauna picture and basic information-->
         <section class="ex_pic_section">
-            <h3 class="ex_pic_title">{{ tool.tool}}</h3>
-            <img src="{% static tool.get_img_path %}" alt="example tool" class="ex_pic" />
+            <h3 class="ex_pic_title">{{ fauna.fauna}}</h3>
+            <img src="{% static fauna.get_img_path %}" alt="example fauna" class="ex_pic" />
 
             <section class="item_info_wrapper">
                 <ul class="item_category">
                     <li>Category</li>
-                    <li><a href="{% url "subnautica:tools_view" %}" class="item_category_text">Tools</a></li>
+                    <li><a href="{% url "subnautica:faunas_view" %}" class="item_category_text">Fauna</a></li>
                 </ul>
                 <ul class="item_type">
-                    <li>Build Time</li>
-                    <li><a class="item_type_text">{{  tool.build_time }}</a></li>
+                    <li>Type</li>
+                    <li><a class="item_type_text">{{  fauna.fauna_type }}</a></li>
                 </ul>
                 <ul class="item_depth_range">
-                    <li>Attribute</li>
-                    <li><a class="item_depth_range_text">{{ tool.attribute}}</a></li>
+                    <li>Attitude</li>
+                    <li><a class="item_depth_range_text">{{ fauna.attitude}}</a></li>
                 </ul>
+                <ul class="item_resources">
+                    <li>Biome</li>
+                    {% for biome in fauna.biomes %}
+                    <li><a href="{{ biome.url }}" class="item_resources_text">{{ biome.name }}</a></li>
+                {% endfor %}
+                </ul>
+
             </section>
         </section>
     </div>

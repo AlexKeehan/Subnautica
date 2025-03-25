@@ -1,0 +1,68 @@
+.left_bar {
+    width: 70%;
+}
+
+.main_para {
+    font-size: 1.1em;
+}
+
+.main_content, .right_bar {
+    width: 15%;
+    padding: 1em;
+    font-size: 1.4em;
+    color:white;
+}
+
+.header_right {
+    color: white;
+    padding: .2em;
+    background-color: rgba(39, 206, 245, 0.5);
+    border-radius: 5px;
+}
+
+.main_content ul, .right_bar ul {
+    padding: .3em;
+    list-style-type: none;
+    margin-bottom: 3em;
+}
+
+.main_content ul a, .right_bar ul a {
+    color: white;
+}
+
+.main_content li, .right_bar li {
+    margin-bottom: 1em;
+}
+
+.main_content li a, .right_bar li a{
+    text-decoration: none;
+}
+
+.main_content a {
+    background-color: rgba(39, 206, 245, 0.5);
+    box-shadow: 0 .2em .4em rgba(0, 0, 0, 0.2);
+    padding: .1em;
+    border-radius: 5px;
+    color: rgba(148, 203, 236, 1.0);
+}
+
+.history_list li a, .activity_list li a {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.history_list li, .activity_list li{
+    list-style-type: disc;
+    margin-left: 1.6em;
+    font-size: .8em;
+}
+
+.history_list li::marker, .activity_list li::marker {
+    color: rgba(39, 206, 245, 0.8);
+}
+
+.right_bar .history_title, .right_bar .activity_title{
+    background-color: rgba(39, 206, 245, 0.5);
+    box-shadow: 0 .2em .4em rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+
+}

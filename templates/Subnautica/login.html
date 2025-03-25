@@ -1,0 +1,33 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/login.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+    <!--Section to display login information-->
+    <div class="login_wrapper">
+        <div class="login_layout">
+            <h2>Login</h2>
+            <!--Use JavaScript to redirect to admin_dashboard.html or display error message depending on login -->
+            <form id="login_form" method="POST">
+                {% csrf_token %}
+                <div class="textbox">
+                    <input type="text" placeholder="Enter Username" name="username" id="username" required>
+                </div>
+                <div class="textbox">
+                    <input type="password" placeholder="Enter Password" name="password" id="password" required>
+                </div>
+                <div class="submit_button">
+                    <button type="submit">Submit</button>
+                </div>
+                <!--If there is an error message, then it will show up here-->
+                {% if error_msg %}
+                    <p id="error_msg" class="error_msg">{{ error_msg }}</p>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,9 +1,9 @@
 class Resources:
-    def __init__(self, resource, description, obtain_from, location, size):
+    def __init__(self, resource, description, obtain_from, locations, size):
         self.resource = resource
         self.description = description
         self.obtain_from = obtain_from
-        self.location = location
+        self.locations = locations
         self.size = size
 
     def get_img_name(self):
@@ -21,9 +21,10 @@ titanium = Resources(
     Titanium is a material that is heavily used in many crafting recipes.
     It is one of the earliest resources the player can obtain and is very common.
     """,
-    "Large Resource Deposits "
-    "<br/>"
-    "Limestone Outcrop",
+    """
+    Large Resource Deposits <br/>
+    Limestone Outcrop
+    """,
     [
         {"name": "Bulb Zone", "url": "/subnautica/biomes/bulb_zone/"},
         {"name": "Crag Field", "url": "/subnautica/biomes/crag_field/"},

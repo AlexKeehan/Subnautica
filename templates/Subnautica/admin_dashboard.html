@@ -1,0 +1,31 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/admin_dashboard.css" %}" />
+{% endblock %}
+{% block main_wrapper %}
+    <div class="main_wrapper">
+        <!--Option to return to logged-in user index. This section will be reworked for better navigation-->
+        <div class="return_button_wrapper">
+            <a href="{% url "Subnautica:user_index_view" %}" class="return_button">Return to Logged-in User index</a>
+        </div>
+        <!--List different admin options available-->
+        <main class="admin_main_layout">
+            <div class="admin_left_bar">
+                <ul>
+                    <li>
+                        <h1>Actions</h1>
+                        <!-- Different CRUD operations -->
+                        <ul class="actions_list">
+                            <li><a href="{% url "Subnautica:add_item_view" %}">Add New Item</a></li>
+                            <li><a href="{% url "Subnautica:edit_item_view" %}">Edit Item</a></li>
+                            <li><a href="{% url "Subnautica:del_item_view" %}">Delete Item</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </main>
+    </div>
+{% endblock %}

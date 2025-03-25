@@ -5,3 +5,4 @@ from .faunas import *
 from .floras import *
 from .eggs import *
 from .resources import *
+from .users import *

@@ -1,0 +1,56 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+{% load link_filter %}
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/list.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+
+    <div class="info_main_wrapper">
+            <section class="ex_info_section">
+                <h2 class="ex_title">Resources</h2>
+                <p class="ex_info">
+                    Resources are items used in the crafting process to create tools and items. They form the backbone of the survival experience and are essential for progression and survival.
+                </p>
+            </section>
+            <section class="ex_pic_section">
+                <h3 class="ex_pic_title">Titanium</h3>
+                <img src="{% static "img/Resources/titanium.webp" %}" alt="example resource" class="ex_pic" />
+                <a href="{% url "Subnautica:resource_view" resource_name="titanium" %}" class="ex_link">Titanium</a>
+            </section>
+    </div>
+    <div class="list_main_wrapper">
+        <section class="list_title_wrapper">
+            <h4 class="list_title">Resources</h4>
+        </section>
+
+        <section class="item_list">
+            <!-------------------------------------------->
+            <div class="list_header">
+                <p>Resource</p>
+                <p>Obtain From</p>
+                <p>Location</p>
+            </div>
+
+            <!-------------------------------------------->
+            {% for resource in resources_list %}
+            <div class="item">
+                <div class="egg_pic">
+                    <img src="{% static 'img/Resources/'|add:resource.get_img_name %}" alt="{{ resource.resource }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:resource_view' resource_name=resource.get_resource_url %}">{{ resource.resource }}</a>
+                </div>
+                <p class="item_desc">
+                    {{ resource.obtain_from|convert_to_links|safe }}
+                </p>
+                <ul class="biome_resources">
+                    {% for location in resource.locations %}
+                        <li><a href="{{ location.url }}">{{ location.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}
