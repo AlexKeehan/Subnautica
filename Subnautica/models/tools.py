@@ -1,9 +1,9 @@
 class Tools:
-    def __init__(self, tool, description, short_description, type, build_time, attribute):
+    def __init__(self, tool, description, short_description, tool_type, build_time, attribute):
         self.tool = tool
         self.description = description
         self.short_description = short_description
-        self.type = type
+        self.tool_type = tool_type
         self.build_time = build_time
         self.attribute = attribute
 

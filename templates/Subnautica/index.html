@@ -44,6 +44,11 @@
                     <li><a href="{%  url "Subnautica:faunas_view" %}">Faunas</a></li>
                     <li><a href="{% url "Subnautica:eggs_view" %}">Eggs</a></li>
                     <li><a href="{% url "Subnautica:resources_view" %}">Resources</a></li>
+
+                    <!-- Check for admin user to display route to admin dashboard-->
+                    {% if request.session.role == "admin" %}
+                        <li><a href="{% url "Subnautica:admin_user_view" %}">Admin Dashboard</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>

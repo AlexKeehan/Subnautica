@@ -1,6 +1,6 @@
 {% extends "Subnautica/index.html" %}
 {% load static %}
-
+{% load link_filter %}
 {% block css_styling %}
     <link rel="stylesheet" href="{%  static "css/main.css" %}" />
     <link rel="stylesheet" href="{%  static "css/list.css" %}" />
@@ -15,263 +15,51 @@
                     Eggs within Subnautica are the unhatched variants of their respective Fauna counterparts.
                     Almost all eggs can be used to hatch their respective creatures. Eggs can only be found in the respective creatures biomes.
                     <br/><br/>
-                    A common egg the player will encounter is the Ampeel Egg, which can be found in <a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_zone" %}">Blood Kelp Zone</a> and <a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a>.
+                    A common egg the player will encounter is the Ampeel Egg, which can be found in <a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_zone" %}">Blood Kelp Zone</a> and
+                    <a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a>.
                     Once found, this egg can be placed in an Alien Containment structure and will hatch after several in-game days.
                 </p>
             </section>
             <section class="ex_pic_section">
                 <h3 class="ex_pic_title">Ampeel Egg</h3>
-                <img src="{% static "img/Eggs/ampeel_egg.webp" %}" alt="example biome" class="ex_pic" />
+                <img src="{% static "img/Eggs/ampeel_egg.webp" %}" alt="example egg" class="ex_pic" />
                 <a href="{% url "Subnautica:fauna_view" fauna_name="ampeel" %}" class="ex_link">Ampeel Egg</a>
             </section>
     </div>
-
-    <!--Section to display list of eggs and their information-->
     <div class="list_main_wrapper">
         <section class="list_title_wrapper">
             <h4 class="list_title">Eggs</h4>
         </section>
 
         <section class="item_list">
-            <!--All egg images are from the official Subnautica wiki: https://subnautica.fandom.com/wiki/Eggs)-->
             <!-------------------------------------------->
             <div class="list_header">
                 <p>Egg</p>
                 <p>Description</p>
                 <p>Attitude</p>
-                <p>Location(s)</p>
+                <p>Location</p>
             </div>
 
             <!-------------------------------------------->
+            {% for egg in eggs_list %}
             <div class="item">
                 <div class="egg_pic">
-                    <img src="{% static "img/Eggs/ampeel_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="ampeel" %}">Ampeel</a>
+                    <img src="{% static 'img/Eggs/'|add:egg.get_img_name %}" alt="{{ egg.egg }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:fauna_view' fauna_name=egg.get_fauna_url %}">{{ fauna.fauna }}</a>
                 </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="ampeel" %}">Ampeels</a> spawn from this egg</p>
+                <p class="item_desc">
+                    {{ egg.description|convert_to_links|safe }}
+                </p>
                 <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
+                    <li><a>{{ egg.attitude }}</a></li>
                 </ul>
                 <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_zone" %}">Blood Kelp Zone</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a></li>
+                    {% for location in egg.locations %}
+                    <li><a href="{{ location.url }}">{{ location.name }}</a></li>
+                    {% endfor %}
                 </ul>
             </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/boneshark_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="boneshark" %}">Boneshark</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="boneshark" %}">Bonesharks</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="mushroom_forest" %}">Mushroom Forest</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="underwater_islands" %}">Underwater Islands</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/crabsnake_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="crabsnake" %}">Crabsnake</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="crabsnake" %}">Crabsnakes</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="jellyshroom_caves" %}">Jellyshroom Cave</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/crabsquid_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="crabsquid" %}">Crabsquid</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="crabsquid" %}">Crabsquid</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="deep_grand_reef" %}">Deep Grand Reef</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="blood_kelp_zone" %}">Blood Kelp Zone (Northern)</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/crashfish_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="crashfish" %}">Crashfish</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="crashfish" %}">Crashfish</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest_caves" %}">Kelp Forest Caves</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Safe Shallows</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows_caves" %}">Safe Shallows Caves</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/cuddlefish_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="cuddlefish" %}">Cuddlefish</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="cuddlefish" %}">Cuddlefish</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Passive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="deep_grand_reef" %}">Deep Grand Reef</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="dunes" %}">Dunes</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="lost_river" %}">Lost River</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="mushroom_forest_caves" %}">Mushroom Forest Caves</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/gasopod_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="gasopod" %}">Gasopod</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="gasopod" %}">Gasopod</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Neutral</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="crash_zone_mesas" %}">Crash Zone Mesas</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="dunes" %}">Dunes</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Safe Shallows</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/jellyray_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="jellyray" %}">Jellyray</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="jellyray" %}">Jellyray</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Passive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="deep_grand_reef" %}">Deep Grand Reef</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="mushroom_forest" %}">Mushroom Forest</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="mushroom_forest_caves" %}">Mushroom Forest Caves</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/lava_lizard_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="lava_lizard" %}">Lava Lizard</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="lava_lizard" %}">Lava Lizard</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="lava_castle" %}">Lava Castle</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="lava_lakes" %}">Lava Lakes</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/mesmer_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="mesmer" %}">Mesmer</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="mesmer" %}">Mesmer</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone" %}">Bulb Zone</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="bulb_zone_caves" %}">Bulb Zone Caves</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="lost_river" %}">Lost River</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="bone_fields_caves" %}">Bone Fields Caves</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/rabbit_ray_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="rabbit_ray" %}">Rabbit Ray</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="rabbit_ray" %}">Rabbit Ray</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Passive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Safe Shallows</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/sand_shark_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="sand_shark" %}">Sand Shark</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="sand_shark" %}">Sand Shark</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="grassy_plateaus" %}">Grassy Plateaus</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/spadefish_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="spadefish" %}">Spadefish</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="spadefish" %}">Spadefish</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Passive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="deep_sparse_reef" %}">Deep Sparse Reef</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="grand_reef" %}">Grand Reef</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="grassy_plateaus_caves" %}">Grassy Plateaus Caves</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="underwater_islands" %}">Underwater Islands</a></li>
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="underwater_islands_caves" %}">Underwater Islands Caves</a></li>
-                </ul>
-            </div>
-
-            <!-------------------------------------------->
-            <div class="item">
-                <div class="egg_pic">
-                    <img src="{% static "img/Eggs/stalker_egg.webp" %}" alt="egg image" class="item_img" />
-                    <a class="item_name" href="{% url "Subnautica:fauna_view" fauna_name="stalker" %}">Stalker</a>
-                </div>
-                <p class="item_desc"><a href="{% url "Subnautica:fauna_view" fauna_name="stalker" %}">Stalker</a> spawn from this egg</p>
-                <ul class="depth_range">
-                    <li><a>Aggressive</a></li>
-                </ul>
-                <ul class="biome_resources">
-                    <li><a href="{% url "Subnautica:biome_view" biome_name="kelp_forest" %}">Kelp Forest</a></li>
-                </ul>
-            </div>
+            {% endfor %}
         </section>
     </div>
 {% endblock %}

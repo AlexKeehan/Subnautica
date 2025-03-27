@@ -1,6 +1,8 @@
 from django.contrib.auth import logout
-from django.shortcuts import render, redirect
-from .models import biomes_list, resources_list, floras_list, faunas_list, tools_list, vehicles_list, eggs_list, user, admin_user
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import biomes_list, resources_list, floras_list, faunas_list, tools_list, vehicles_list, eggs_list, user, \
+    admin_user, tools
 
 
 # Create your views here.
@@ -115,10 +117,145 @@ def signup_view(request):
     return render(request, 'subnautica/signup.html')
 
 def add_item_view(request):
+    if request.method == "POST":
+        model = request.POST.get("select_model")
+
+        if model == "biomes":
+            biome_name = request.POST.get("biome")
+            biome = next((biome for biome in biomes_list if biome.get_biome_url() == biome_name), None)
+
+            if biome:
+                new_biome = {
+                    "biome": biome.biome,
+                    "description": biome.description,
+                    "short_description": biome.short_description,
+                    "biome_type": biome.biome_type,
+                    "depth_range": biome.depth_range,
+                    "temp_range": biome.temp_range
+                }
+                return JsonResponse({"success": True, "item": new_biome})
+            else:
+                return JsonResponse({"success": False, "message": "Biome Not Found"})
     return render(request, 'subnautica/add_item.html')
 
 def edit_item_view(request):
-    return render(request, 'subnautica/edit_item.html')
+    model = request.GET.get("select_model")
+
+    if not model:
+        model = request.GET.get("select_model", "biomes")
+
+    item_id = request.GET.get("item_id")
+    selected_item = None
+
+    item_list = []
+
+    if model == "biomes":
+        item_list = biomes_list
+    elif model == "faunas":
+        item_list = faunas_list
+    elif model == "eggs":
+        item_list = eggs_list
+    elif model == "floras":
+        item_list = floras_list
+    elif model == "vehicles":
+        item_list = vehicles_list
+    elif model == "tools":
+        item_list = tools_list
+    elif model == "resources":
+        item_list = resources_list
+    else:
+        model = None
+
+    if item_id:
+        if model == "biomes":
+            selected_item = next((item for item in biomes_list if item.get_biome_url() == item_id), None)
+        elif model == "faunas":
+            selected_item = next((item for item in faunas_list if item.get_fauna_url() == item_id), None)
+        elif model == "eggs":
+            selected_item = next((item for item in eggs_list if item.get_egg_url() == item_id), None)
+        elif model == "floras":
+            selected_item = next((item for item in floras_list if item.get_flora_url() == item_id), None)
+        elif model == "vehicles":
+            selected_item = next((item for item in vehicles_list if item.get_vehicle_url() == item_id), None)
+        elif model == "tools":
+            selected_item = next((item for item in tools_list if item.get_tool_url() == item_id), None)
+        elif model == "resources":
+            selected_item = next((item for item in resources_list if item.get_resource_url() == item_id), None)
+        else:
+            selected_item = None
+
+
+    if request.method == "POST" and selected_item:
+        if model == "biomes":
+            selected_item.biome = request.POST.get("biome")
+            selected_item.description = request.POST.get("description")
+            selected_item.short_description = request.POST.get("short_description")
+            selected_item.biome_type = request.POST.get("biome_type")
+            selected_item.depth_range = request.POST.get("depth_range")
+            selected_item.temp_range = request.POST.get("temp_range")
+            selected_item.resources = request.POST.get("resources")
+
+            return JsonResponse({"success": True, "message": "Biome Updated Successfully"})
+
+    image_path = selected_item.get_img_path() if selected_item else None
+
+    return render(request, 'subnautica/edit_item.html', {
+        "model": model,
+        "item_list": item_list,
+        "selected_item": selected_item,
+        "image_path": image_path,
+    })
 
 def del_item_view(request):
-    return render(request, 'subnautica/del_item.html')
+    model = request.GET.get("select_model")
+    item_id = request.GET.get("item_id")
+    selected_item = None
+    item_list = []
+
+    if not model:
+        model = request.GET.get("select_model", "biomes")
+
+    if model == "biomes":
+        item_list = biomes_list
+    elif model == "faunas":
+        item_list = faunas_list
+    elif model == "eggs":
+        item_list = eggs_list
+    elif model == "floras":
+        item_list = floras_list
+    elif model == "vehicles":
+        item_list = vehicles_list
+    elif model == "tools":
+        item_list = tools_list
+    elif model == "resources":
+        item_list = resources_list
+    else:
+        model = None
+
+    if item_id:
+        if model == "biomes":
+            selected_item = next((item for item in biomes_list if item.get_biome_url() == item_id), None)
+        elif model == "faunas":
+            selected_item = next((item for item in faunas_list if item.get_fauna_url() == item_id), None)
+        elif model == "eggs":
+            selected_item = next((item for item in eggs_list if item.get_egg_url() == item_id), None)
+        elif model == "floras":
+            selected_item = next((item for item in floras_list if item.get_flora_url() == item_id), None)
+        elif model == "vehicles":
+            selected_item = next((item for item in vehicles_list if item.get_vehicle_url() == item_id), None)
+        elif model == "tools":
+            selected_item = next((item for item in tools_list if item.get_tool_url() == item_id), None)
+        elif model == "resources":
+            selected_item = next((item for item in resources_list if item.get_resource_url() == item_id), None)
+        else:
+            selected_item = None
+
+    if request.method == "POST" and selected_item:
+        if model == "biomes":
+            biomes_list.remove(selected_item)
+            return JsonResponse({"success": True, "message": "Item Deleted Successfully"})
+    return render(request, 'subnautica/del_item.html', {
+        "model": model,
+        "item_list": item_list,
+        "selected_item": selected_item,
+    })

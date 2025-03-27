@@ -1,11 +1,11 @@
 class Floras:
-    def __init__(self, flora, description, use, attitude, obtain_from, biome, growth_time):
+    def __init__(self, flora, description, use, attitude, obtain_from, biomes, growth_time):
         self.flora = flora
         self.description = description
         self.use = use
         self.attitude = attitude
         self.obtain_from = obtain_from
-        self.biome = biome
+        self.biomes = biomes
         self.growth_time = growth_time
 
     def get_img_name(self):

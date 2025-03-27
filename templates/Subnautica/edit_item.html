@@ -1,0 +1,106 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/add_item.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+    <div class="add_item_wrapper">
+        <main class="add_item_layout">
+            <div class="add_item_info_section">
+                <h1>Edit Item</h1>
+
+                <form method="GET" action="{% url "Subnautica:edit_item_view" %}">
+                    <div class="input_info">
+                        <label for="select_model">Select Model: </label>
+                        <select id="select_model" name="select_model">
+                            <option value="biomes" {% if model == "biomes" %}selected{% endif %}>Biomes</option>
+                            <option value="eggs" {% if model == "eggs" %}selected{% endif %}>Eggs</option>
+                            <option value="faunas" {% if model == "faunas" %}selected{% endif %}>Faunas</option>
+                            <option value="floras" {% if model == "floras" %}selected{% endif %}>Floras</option>
+                            <option value="resources" {% if model == "resources" %}selected{% endif %}>Resources</option>
+                            <option value="tools" {% if model == "tools" %}selected{% endif %}>Tools</option>
+                            <option value="vehicles" {% if model == "vehicles" %}selected{% endif %}>Vehicles</option>
+                        </select>
+                    </div>
+                    <label for="item_id" id="item_id">Select Item:</label>
+                    <select name="item_id" id="item_element" required>
+                        <option value=""> Select An Item</option>
+                        {% for item in item_list %}
+                            <option value="{{ item.get_biome_url }}" {% if selected_item and selected_item.get_biome_url == item.get_biome_url %}selected{% endif %}>
+                                {{ item.biome }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit">Edit</button>
+                </form>
+
+                {% if selected_item %}
+                <!-- Start editing the selected item -->
+                <form id="edit_item_form" method="POST" action="{% url 'Subnautica:edit_item_view' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="select_model" value="{{ model }}">
+                    <input type="hidden" name="item_id" value="{{ selected_item.get_biome_url }}">
+
+                    <!-- Dynamic form fields based on model -->
+                    {% if model == 'biomes' %}
+                    <div class="input_info">
+                        <label for="biome">Biome Name: </label>
+                        <input type="text" name="biome" id="biome" value="{{ selected_item.biome }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description">{{ selected_item.description }}</textarea>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="short_description">Short Description: </label>
+                        <input type="text" name="short_description" id="short_description" value="{{ selected_item.short_description }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="biome_type">Biome Type: </label>
+                        <input type="text" name="biome_type" id="biome_type" value="{{ selected_item.biome_type }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="depth_range">Depth Range: </label>
+                        <input type="text" name="depth_range" id="depth_range" value="{{ selected_item.depth_range }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="temp_range">Temperature Range: </label>
+                        <input type="text" name="temp_range" id="temp_range" value="{{ selected_item.temp_range }}">
+                    </div>
+                        {% endif %}
+
+                <div class="input_info">
+                    <label for="item_image">Item Image: </label>
+                    <input type="file" id="item_image" name="item_image" accept="image/*">
+                </div>
+
+                    <div class="submit_button">
+                        <button type="submit" class="edit_item_button">Submit Changes</button>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </main>
+
+        <aside class="image_section">
+            <img src="{% if image_path %}{% static image_path %}{% else %}{% static 'img/placeholder_img.png' %}{% endif %}" alt="Item Preview" class="placeholder_img">        
+        </aside>
+    
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{%  static "js/add_item.js" %}"></script>
+    <script>
+        imageDisplay();
+    </script>
+{% endblock %}
