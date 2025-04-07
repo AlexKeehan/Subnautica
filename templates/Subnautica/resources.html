@@ -45,7 +45,7 @@
                     {{ resource.obtain_from|convert_to_links|safe }}
                 </p>
                 <ul class="biome_resources">
-                    {% for location in resource.locations %}
+                    {% for location in resource.biomes %}
                         <li><a href="{{ location.url }}">{{ location.name }}</a></li>
                     {% endfor %}
                 </ul>

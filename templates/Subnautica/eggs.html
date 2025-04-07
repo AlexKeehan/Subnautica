@@ -54,8 +54,8 @@
                     <li><a>{{ egg.attitude }}</a></li>
                 </ul>
                 <ul class="biome_resources">
-                    {% for location in egg.locations %}
-                    <li><a href="{{ location.url }}">{{ location.name }}</a></li>
+                    {% for biome in egg.biomes %}
+                    <li><a href="{{ biome.url }}">{{ biome.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

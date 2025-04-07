@@ -32,7 +32,7 @@
                 </ul>
                 <ul class="item_resources">
                     <li>Biome</li>
-                    {% for location in resource.locations %}
+                    {% for location in resource.biomes %}
                     <li><a href="{{ location.url }}" class="item_resources_text">{{ location.name }}</a></li>
                 {% endfor %}
                 </ul>

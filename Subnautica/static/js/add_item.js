@@ -5,45 +5,46 @@ document.getElementById("select_model").addEventListener("change", function() {
 
     const modelFields = {
         biomes: [
-            { label: "Biome Name", name: "biome", placeholder: "Enter Biome Name" },
+            { label: "Biome Name", name: "name", placeholder: "Enter Biome Name" },
             { label: "Description", name: "description", placeholder: "Enter Description" },
             { label: "Short Description", name: "short_description", placeholder: "Enter Short Description" },
             { label: "Biome Type", name: "biome_type", placeholder: "Enter Biome Type" },
             { label: "Depth Range", name: "depth_range", placeholder: "Enter Depth Range" },
             { label: "Temperature Range", name: "temp_range", placeholder: "Enter Temperature Range" },
-            { label: "Resources", name: "resources", placeholder: "Enter Resources" }
+            { label: "Resources", name: "resources", isSelectMultiple: true },
         ],
         eggs: [
-            { label: "Egg Name", name: "egg", placeholder: "Enter Egg Name" },
+            { label: "Egg Name", name: "name", placeholder: "Enter Egg Name" },
             { label: "Description", name: "description", placeholder: "Enter Description" },
             { label: "Attitude", name: "attitude", placeholder: "Enter Attitude" },
-            { label: "Locations", name: "locations", placeholder: "Enter Locations" }
+            { label: "fauna", name: "fauna", isSelectMultiple: true },
+            { label: "biomes", name: "biomes", isSelectMultiple: true },
         ],
         faunas: [
-            { label: "Fauna", name: "fauna", placeholder: "Enter Fauna Name" },
+            { label: "Fauna", name: "name", placeholder: "Enter Fauna Name" },
             { label: "Description", name: "description", placeholder: "Enter Description" },
             { label: "Attitude", name: "attitude", placeholder: "Enter Attitude" },
             { label: "Fauna Type", name: "fauna_type", placeholder: "Enter Fauna Type" },
-            { label: "Biomes", name: "biomes", placeholder: "Enter Biomes" },
+            { label: "Biomes", name: "biomes", isSelectMultiple: true },
         ],
         floras: [
-            { label: "Flora Name", name: "flora", placeholder: "Enter Flora Name" },
+            { label: "Flora Name", name: "name", placeholder: "Enter Flora Name" },
             { label: "Description", name: "description", placeholder: "Enter Description" },
             { label: "Use", name: "use", placeholder: "Enter Use" },
             { label: "Attitude", name: "attitude", placeholder: "Enter Attitude" },
             { label: "Obtain From", name: "obtain_from", placeholder: "Enter Obtain From" },
-            { label: "Biomes", name: "biomes", placeholder: "Enter Biomes" },
+            { label: "Biomes", name: "biomes", isSelectMultiple: true },
             { label: "Growth Time", name: "growth_time", placeholder: "Enter Growth Time" },
         ],
         resources: [
-            { label: "Resource Name", name: "resource", placeholder: "Enter Resource Name" },
+            { label: "Resource Name", name: "name", placeholder: "Enter Resource Name" },
             { label: "Description", name: "description", placeholder: "Enter Description" },
             { label: "Obtain From", name: "obtain_from", placeholder: "Enter Obtain From" },
-            { label: "Locations", name: "locations", placeholder: "Enter Locations" },
+            { label: "biomes", name: "biomes", isSelectMultiple: true },
             { label: "Size", name: "size", placeholder: "Enter Size" },
         ],
         tools: [
-            { label: "Tool Name", name: "tool", placeholder: "Enter Tool Name" },
+            { label: "Tool Name", name: "name", placeholder: "Enter Tool Name" },
             { label: "Description", name: "description", placeholder: "Enter Description" },
             { label: "Short Description", name: "short_description", placeholder: "Enter Short Description" },
             { label: "Tool Type", name: "tool_type", placeholder: "Enter Type" },
@@ -51,7 +52,7 @@ document.getElementById("select_model").addEventListener("change", function() {
             { label: "Attribute", name: "attribute", placeholder: "Enter Attribute" },
         ],
         vehicles: [
-            { label: "Vehicle Name", name: "vehicle", placeholder: "Enter Vehicle Name" },
+            { label: "Vehicle Name", name: "name", placeholder: "Enter Vehicle Name" },
             { label: "Description", name: "description", placeholder: "Enter Description" },
             { label: "Short Description", name: "short_description", placeholder: "Enter Short Description" },
             { label: "Velocity", name: "velocity", placeholder: "Enter Velocity" },
@@ -60,27 +61,66 @@ document.getElementById("select_model").addEventListener("change", function() {
         ]
     };
 
-    const fields = modelFields[model];
-    if (fields) {
-        fields.forEach(field => {
-            const div = document.createElement('div');
-            div.classList.add('input_info');
+    const url = `${getDropDownData}?model=${model}`;
 
-            const label = document.createElement('label');
-            label.setAttribute('for', field.name);
-            label.textContent = field.label;
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const fields = modelFields[model];
+        if (fields) {
+            fields.forEach(field => {
+                const div = document.createElement('div');
+                div.classList.add('input_info');
 
-            const input = document.createElement('input');
-            input.setAttribute('type', 'text');
-            input.setAttribute('id', field.name);
-            input.setAttribute('name', field.name);
-            input.setAttribute('placeholder', field.placeholder);
+                const label = document.createElement('label');
+                label.setAttribute('for', field.name);
+                label.textContent = field.label;
 
-            div.appendChild(label);
-            div.appendChild(input);
-            extraFieldsCont.appendChild(div);
-        });
-    }
+                let input;
+                if (field.isSelectMultiple) {
+                    input = document.createElement('select');
+                    input.setAttribute('id', field.name);
+                    input.setAttribute('name', field.name);
+                    input.setAttribute('multiple', 'multiple');
+                    input.classList.add('dropdown');
+
+                    if (field.name === "fauna" && data.faunas) {
+                        data.faunas.forEach(fauna => {
+                            const option = document.createElement("option");
+                            option.value = fauna.id;
+                            option.textContent = fauna.name;
+                            input.appendChild(option);
+                        })
+                    }
+
+                    if (field.name === "biomes" && data.biomes) {
+                        data.biomes.forEach(biome => {
+                            const option = document.createElement('option');
+                            option.value = biome.id;
+                            option.textContent = biome.name;
+                            input.appendChild(option);
+                        });
+                    }
+                } else {
+                    input = document.createElement('input');
+                    input.setAttribute('type', 'text');
+                    input.setAttribute('id', field.name);
+                    input.setAttribute('name', field.name);
+                    input.setAttribute('placeholder', field.placeholder);
+                }
+
+                div.appendChild(label);
+                div.appendChild(input);
+                extraFieldsCont.appendChild(div);
+            });
+        }
+    })
+    .catch(error => console.error("Error Getting Data", error));
 });
 
 imageDisplay()

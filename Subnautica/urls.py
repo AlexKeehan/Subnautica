@@ -26,4 +26,5 @@ urlpatterns = [
     path('add_item/', views.add_item_view, name='add_item_view'),
     path('edit_item/', views.edit_item_view, name='edit_item_view'),
     path('del_item/', views.del_item_view, name='del_item_view'),
+    path('get_dropdown_data/', views.get_dropdown_data_view, name='get_dropdown_data_view'),
 ]

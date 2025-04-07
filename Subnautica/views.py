@@ -1,9 +1,16 @@
-from django.contrib.auth import logout
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import biomes_list, resources_list, floras_list, faunas_list, tools_list, vehicles_list, eggs_list, user, \
-    admin_user, tools
+from django.shortcuts import render, redirect
+from .forms import *
+from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, user, \
+    admin_user
 
+biomes_list = Biomes.objects.all()
+resources_list = Resources.objects.all()
+tools_list = Tools.objects.all()
+vehicles_list = Vehicles.objects.all()
+faunas_list = Faunas.objects.all()
+floras_list = Floras.objects.all()
+eggs_list = Eggs.objects.all()
 
 # Create your views here.
 def subnautica_view(request):
@@ -121,22 +128,102 @@ def add_item_view(request):
         model = request.POST.get("select_model")
 
         if model == "biomes":
-            biome_name = request.POST.get("biome")
-            biome = next((biome for biome in biomes_list if biome.get_biome_url() == biome_name), None)
+            form = BiomesForm(request.POST)
+            if form.is_valid():
+                biome = form.save(commit=False)
+                biome.save()
 
-            if biome:
-                new_biome = {
-                    "biome": biome.biome,
-                    "description": biome.description,
-                    "short_description": biome.short_description,
-                    "biome_type": biome.biome_type,
-                    "depth_range": biome.depth_range,
-                    "temp_range": biome.temp_range
-                }
-                return JsonResponse({"success": True, "item": new_biome})
+                resources = form.cleaned_data.get("resources")
+
+                if resources:
+                    biome.resources.set(resources)
+                    biome.save()
+
+                return redirect("subnautica:add_item_view")
             else:
-                return JsonResponse({"success": False, "message": "Biome Not Found"})
-    return render(request, 'subnautica/add_item.html')
+                return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
+        elif model == "resources":
+            form = ResourcesForm(request.POST)
+            if form.is_valid():
+                resource = form.save(commit=False)
+                resource.save()
+
+                biomes = form.cleaned_data.get("biomes")
+
+                if biomes:
+                    resource.biomes.set(biomes)
+                    resource.save()
+                return redirect("subnautica:add_item_view")
+            else:
+                print(form.errors)
+                return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
+        elif model == "eggs":
+            form = EggsForm(request.POST)
+            if form.is_valid():
+                egg = form.save(commit=False)
+                egg.save()
+
+                biomes = form.cleaned_data.get("biomes")
+
+                if biomes:
+                    egg.biomes.set(biomes)
+                    egg.save()
+
+                fauna = form.cleaned_data.get("fauna")
+
+                if fauna:
+                    egg.fauna = fauna
+
+                egg.save()
+                return redirect("subnautica:add_item_view")
+            else:
+                print(form.errors)
+                return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
+        elif model == "floras":
+            form = FlorasForm(request.POST)
+            if form.is_valid():
+                flora = form.save(commit=False)
+                flora.save()
+
+                biomes = form.cleaned_data.get("biomes")
+
+                if biomes:
+                    flora.biomes.set(biomes)
+                    flora.save()
+                return redirect("subnautica:add_item_view")
+        elif model == "faunas":
+            form = FaunasForm(request.POST)
+            if form.is_valid():
+                fauna = form.save(commit=False)
+                fauna.save()
+
+                biomes = form.cleaned_data.get("biomes")
+
+                if biomes:
+                    fauna.biomes.set(biomes)
+                    fauna.save()
+                return redirect("subnautica:add_item_view")
+        elif model == "tools":
+            form = ToolsForm(request.POST)
+            if form.is_valid():
+                form.save()
+            return redirect("subnautica:add_item_view")
+        elif model == "vehicles":
+            form = VehiclesForm(request.POST)
+            if form.is_valid():
+                form.save()
+            return redirect("subnautica:add_item_view")
+        else:
+            return render(request, 'subnautica/add_item.html', {'error': "Invalid Model"})
+
+    else:
+        model = request.GET.get("select_model")
+        if model == "biomes":
+            resources_qs = Resources.objects.all()
+            form = BiomesForm()
+            form.fields["resources"].queryset = resources_qs
+        else:
+            return render(request, 'subnautica/add_item.html', {'error': "No model selected"})
 
 def edit_item_view(request):
     model = request.GET.get("select_model")
@@ -259,3 +346,28 @@ def del_item_view(request):
         "item_list": item_list,
         "selected_item": selected_item,
     })
+
+def get_dropdown_data_view(request):
+    model_type = request.GET.get("model")
+    data = []
+
+    if model_type == "resources":
+        biomes = Biomes.objects.all()
+        data = {"biomes": [{"id": biome.id, "name": biome.name} for biome in biomes]}
+    elif model_type == "biomes":
+        resources = Resources.objects.all()
+        data = {"resources": [{"id": resource.id, "name": resource.name} for resource in resources]}
+    elif model_type == "eggs":
+        biomes = Biomes.objects.all()
+        faunas = Faunas.objects.all()
+
+        data = {
+            "biomes": [{"id": biome.id, "name": biome.name} for biome in biomes],
+            "faunas": [{"id": fauna.id, "name": fauna.name} for fauna in faunas]}
+    elif model_type == "faunas":
+        biomes = Biomes.objects.all()
+        data = {"biomes": [{"id": biome.id, "name": biome.name} for biome in biomes]}
+    elif model_type == "floras":
+        biomes = Biomes.objects.all()
+        data = {"biomes": [{"id": biome.id, "name": biome.name} for biome in biomes]}
+    return JsonResponse(data, safe=False)

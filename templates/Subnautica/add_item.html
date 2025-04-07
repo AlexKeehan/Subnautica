@@ -11,7 +11,7 @@
         <main class="add_item_layout">
             <div class="add_item_info_section">
                 <h1>Add Item</h1>
-                <form id="add_item_form" method="POST">
+                <form id="add_item_form" action="{% url "Subnautica:add_item_view" %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" id="add_item_url" value="{% url "Subnautica:add_item_view" %}">
                     <div class="input_info">
@@ -39,4 +39,8 @@
 
 {% block js %}
     <script src="{%  static "js/add_item.js" %}"></script>
+
+    <script>
+        const getDropDownData = "{% url 'Subnautica:get_dropdown_data_view' %}"
+    </script>
 {% endblock %}

@@ -1,36 +1,20 @@
-class Eggs:
-    def __init__(self, egg, description, attitude, fauna, locations):
-        self.egg = egg
-        self.description = description
-        self.attitude = attitude
-        self.fauna = fauna
-        self.locations = locations
+from django.db import models
 
+class Eggs(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
+    attitude = models.CharField(max_length=50)
+    fauna = models.ForeignKey("Faunas", on_delete=models.CASCADE)
+    biomes = models.ManyToManyField("Biomes", "eggs_biomes")
 
     def get_img_name(self):
-        return self.egg.lower().replace(" ", "_") + ".webp"
+        return self.name.lower().replace(" ", "_") + ".webp"
 
     def get_egg_url(self):
-        return self.egg.lower().replace(" ", "_")
+        return self.name.lower().replace(" ", "_")
 
     def get_img_path(self):
         return f"img/Eggs/{self.get_img_name()}"
 
     def get_fauna_url(self):
-        return self.fauna.lower().replace(" ", "_")
-
-ampeel_egg = Eggs(
-    "Ampeel Egg",
-    "Ampeels spawn form this egg.",
-    "Aggressive",
-    "Ampeel",
-    [
-        {"name" : "Blood Kelp Zone", "url" : "/subnautica/biomes/blood_kelp_zone/"},
-        {"name" : "Bulb Zone", "url" : "/subnautica/biomes/bulb_zone/"}
-    ],
-
-)
-
-eggs_list = [
-    ampeel_egg,
-]
+        return self.fauna.name.lower().replace(" ", "_")

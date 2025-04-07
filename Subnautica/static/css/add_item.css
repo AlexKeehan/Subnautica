@@ -104,3 +104,52 @@ textarea {
     max-width: 100%;
     width: 100%;
 }
+
+.input_info select {
+    width: 100%;
+    padding: .5em;
+    border-radius: 5px;
+    border: 1px solid rgba(39, 206, 245, 0.5);
+    font-size: 0.6em;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.input_info select.dropdown {
+    width: 100%;
+    padding: 0.75em;
+    border-radius: 1.1em;
+    border: 1px solid rgba(39, 206, 245, 0.5);
+    background-color: white;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.input_info select.dropdown.option:focus,
+.input_info select.dropdown.option:active {
+    outline: none;
+    background-color: white;
+    box-shadow: none;
+}
+
+.input_info select.dropdown option {
+    position: relative;
+    padding-right: 1.1em;
+}
+
+.input_info select.dropdown option.selected {
+    padding-right: 1.2em;
+}
+
+.input_info select.dropdown option.selected::after {
+    content: '✔';
+    position: absolute;
+    right: .8em;
+    top: 0;
+    color: green;
+    pointer-events: none;
+}
+
+.input_info select.dropdown option:focus {
+    background-color: transparent !important;
+}
