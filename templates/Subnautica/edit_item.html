@@ -15,7 +15,7 @@
                 <form method="GET" action="{% url "Subnautica:edit_item_view" %}">
                     <div class="input_info">
                         <label for="select_model">Select Model: </label>
-                        <select id="select_model" name="select_model">
+                        <select id="select_model" name="select_model" onchange="this.form.submit()">
                             <option value="biomes" {% if model == "biomes" %}selected{% endif %}>Biomes</option>
                             <option value="eggs" {% if model == "eggs" %}selected{% endif %}>Eggs</option>
                             <option value="faunas" {% if model == "faunas" %}selected{% endif %}>Faunas</option>
@@ -29,8 +29,8 @@
                     <select name="item_id" id="item_element" required>
                         <option value=""> Select An Item</option>
                         {% for item in item_list %}
-                            <option value="{{ item.get_biome_url }}" {% if selected_item and selected_item.get_biome_url == item.get_biome_url %}selected{% endif %}>
-                                {{ item.biome }}
+                            <option value="{{ item.id }}" {% if selected_item and selected_item.id == item.id %}selected{% endif %}>
+                                {{ item.name }}
                             </option>
                         {% endfor %}
                     </select>
@@ -40,16 +40,16 @@
 
                 {% if selected_item %}
                 <!-- Start editing the selected item -->
-                <form id="edit_item_form" method="POST" action="{% url 'Subnautica:edit_item_view' %}">
+                <form id="edit_item_form" method="POST" action="{% url 'Subnautica:edit_item_view' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" name="select_model" value="{{ model }}">
-                    <input type="hidden" name="item_id" value="{{ selected_item.get_biome_url }}">
+                    <input type="hidden" name="item_id" value="{{ selected_item.id }}">
 
                     <!-- Dynamic form fields based on model -->
                     {% if model == 'biomes' %}
                     <div class="input_info">
-                        <label for="biome">Biome Name: </label>
-                        <input type="text" name="biome" id="biome" value="{{ selected_item.biome }}">
+                        <label for="name">Biome Name: </label>
+                        <input type="text" name="name" id="name" value="{{ selected_item.name }}">
                     </div>
 
                     <div class="input_info">
@@ -76,7 +76,245 @@
                         <label for="temp_range">Temperature Range: </label>
                         <input type="text" name="temp_range" id="temp_range" value="{{ selected_item.temp_range }}">
                     </div>
+                    <div class="input_info">
+                    <label for="resources">Resources: </label>
+                    <select name="resources" id="resources" multiple>
+                        {% for resource in resources %}
+                            <option value="{{ resource.id }}" {% if resource.id in resources %}selected{% endif %}>
+                                {{ resource.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    </div>
                         {% endif %}
+
+                    {% if model == "eggs" %}
+                        <div class="input_info">
+                        <label for="name">Egg Name: </label>
+                        <input type="text" name="name" id="name" value="{{ selected_item.name }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description">{{ selected_item.description }}</textarea>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="attitude">Attitude: </label>
+                        <input type="text" name="attitude" id="attitude" value="{{ selected_item.attitude }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="fauna">Fauna: </label>
+                        <select name="fauna" id="fauna">
+                            <option value="">Select Fauna</option>
+                            {% for fauna in faunas %}
+                                <option value="{{ fauna.id }}" {% if selected_item.fauna.id == fauna.id %}selected{% endif %}>
+                                    {{ fauna.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="biomes">Biomes: </label>
+                        <select name="biomes" id="biomes" multiple>
+                            {% for biome in biomes %}
+                                <option value="{{ biome.id }}" {% if biome.id in biomes %}selected{% endif %}>
+                                    {{ biome.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                {% if model == "floras" %}
+                    <div class="input_info">
+                        <label for="name">Flora Name: </label>
+                        <input type="text" name="name" id="name" value="{{ selected_item.name }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description">{{ selected_item.description }}</textarea>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="use">Use: </label>
+                        <input type="text" name="use" id="use" value="{{ selected_item.use }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="attitude">Attitude: </label>
+                        <input type="text" name="attitude" id="attitude" value="{{ selected_item.attitude }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="obtain_from">Obtain From: </label>
+                        <input type="text" name="obtain_from" id="obtain_from" value="{{ selected_item.obtain_from }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="biomes">Biomes: </label>
+                        <select name="biomes" id="biomes" multiple>
+                            {% for biome in biomes %}
+                                <option value="{{ biome.id }}" {% if biome.id in selected_biomes_ids %}selected{% endif %}>
+                                    {{ biome.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="growth_time">Growth Time: </label>
+                        <input type="text" name="growth_time" id="growth_time" value="{{ selected_item.growth_time }}">
+                    </div>
+                    {% endif %}
+
+                {% if model == "faunas" %}
+                    <div class="input_info">
+                        <label for="name">Fauna Name: </label>
+                        <input type="text" name="name" id="name" value="{{ selected_item.name }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description">{{ selected_item.description }}</textarea>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="fauna_type">Fauna Type: </label>
+                        <input type="text" name="fauna_type" id="fauna_type" value="{{ selected_item.fauna_type }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="attitude">Attitude: </label>
+                        <input type="text" name="attitude" id="attitude" value="{{ selected_item.attitude }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="biomes">Biomes: </label>
+                        <select name="biomes" id="biomes" multiple>
+                            {% for biome in biomes %}
+                                <option value="{{ biome.id }}" {% if biome.id in selected_biomes_ids %}selected{% endif %}>
+                                    {{ biome.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                {% if model == "resources" %}
+                    <div class="input_info">
+                        <label for="name">Resource Name: </label>
+                        <input type="text" name="name" id="name" value="{{ selected_item.name }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description">{{ selected_item.description }}</textarea>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="obtain_from">Obtain From: </label>
+                        <input type="text" name="obtain_from" id="obtain_from" value="{{ selected_item.obtain_from }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="biomes">Biomes: </label>
+                        <select name="biomes" id="biomes" multiple>
+                            {% for biome in biomes %}
+                                <option value="{{ biome.id }}" {% if biome.id in selected_biomes_ids %}selected{% endif %}>
+                                    {{ biome.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="size">Size: </label>
+                        <input type="text" name="size" id="size" value="{{ selected_item.size }}">
+                    </div>
+                    {% endif %}
+
+                {% if model == "tools" %}
+                    <div class="input_info">
+                        <label for="name">Tool Name: </label>
+                        <input type="text" name="name" id="name" value="{{ selected_item.name }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description">{{ selected_item.description }}</textarea>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="short_description">Short Description: </label>
+                        <input type="text" name="short_description" id="short_description" value="{{ selected_item.short_description }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="tool_type">Tool Type: </label>
+                        <input type="text" name="tool_type" id="tool_type" value="{{ selected_item.tool_type }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="build_time">Build Time: </label>
+                        <input type="text" name="build_time" id="build_time" value="{{ selected_item.build_time }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="attribute">Attribute: </label>
+                        <input type="text" name="attribute" id="attribute" value="{{ selected_item.attribute }}">
+                    </div>
+                    {% endif %}
+
+                <div class="input_info">
+                    <label for="item_image">Item Image: </label>
+                    <input type="file" id="item_image" name="item_image" accept="image/*">
+                </div>
+
+                    <div class="submit_button">
+                        <button type="submit" class="edit_item_button">Submit Changes</button>
+                    </div>
+                {% endif %}
+
+                {% if model == "vehicles" %}
+                    <div class="input_info">
+                        <label for="name">Vehicle Name: </label>
+                        <input type="text" name="name" id="name" value="{{ selected_item.name }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description">{{ selected_item.description }}</textarea>
+                    </div>
+
+                    <div class="input_info">
+                        <label for="short_description">Short Description: </label>
+                        <input type="text" name="short_description" id="short_description" value="{{ selected_item.short_description }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="tool_type">Tool Type: </label>
+                        <input type="text" name="tool_type" id="tool_type" value="{{ selected_item.tool_type }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="velocity">Velocity: </label>
+                        <input type="text" name="velocity" id="velocity" value="{{ selected_item.velocity }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="health">Health: </label>
+                        <input type="text" name="health" id="health" value="{{ selected_item.health }}">
+                    </div>
+
+                    <div class="input_info">
+                        <label for="acq_from">Acquired From: </label>
+                        <input type="text" name="acq_from" id="acq_from" value="{{ selected_item.acq_from }}">
+                    </div>
+                    {% endif %}
 
                 <div class="input_info">
                     <label for="item_image">Item Image: </label>
@@ -87,7 +325,6 @@
                         <button type="submit" class="edit_item_button">Submit Changes</button>
                     </div>
                 </form>
-                {% endif %}
             </div>
         </main>
 
