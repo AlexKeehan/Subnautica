@@ -42,14 +42,14 @@
             {% for fauna in faunas_list %}
             <div class="item">
                 <div class="egg_pic">
-                    <img src="{% static 'img/Fauna/'|add:fauna.get_img_name %}" alt="{{ fauna.fauna }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:fauna_view' fauna_name=fauna.get_fauna_url %}">{{ fauna.fauna }}</a>
+                    <img src="{% static 'img/Fauna/'|add:fauna.get_img_name %}" alt="{{ fauna.name }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:fauna_view' fauna_name=fauna.get_fauna_url %}">{{ fauna.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ fauna.attitude }}
                 </p>
                 <ul class="biome_resources">
-                    {% for biome in fauna.biomes %}
+                    {% for biome in fauna.biomes.all %}
                     <li><a href="{{ biome.url }}">{{ biome.name }}</a></li>
                     {% endfor %}
                 </ul>

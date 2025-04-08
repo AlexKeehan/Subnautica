@@ -42,8 +42,8 @@
             {% for biome in biomes_list %}
             <div class="item">
                 <div class="item_pic">
-                    <img src="{% static 'img/Biomes/'|add:biome.get_img_name %}" alt="{{ biome.biome }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:biome_view' biome_name=biome.get_biome_url %}">{{ biome.biome }}</a>
+                    <img src="{% static 'img/Biomes/'|add:biome.get_img_name %}" alt="{{ biome.name }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:biome_view' biome_name=biome.get_biome_url %}">{{ biome.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ biome.short_description|convert_to_links|safe }}
@@ -52,7 +52,7 @@
                     <li><a>{{ biome.depth_range }}</a></li>
                 </ul>
                 <ul class="biome_resources">
-                    {% for resource in biome.resources %}
+                    {% for resource in biome.resources.all %}
                     <li><a href="{{ resource.url }}">{{ resource.name }}</a></li>
                     {% endfor %}
                 </ul>

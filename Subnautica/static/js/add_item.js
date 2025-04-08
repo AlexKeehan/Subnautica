@@ -106,6 +106,19 @@ document.getElementById("select_model").addEventListener("change", function() {
                             input.appendChild(option);
                         });
                     }
+
+                    // Checkmark functionality
+                     input.addEventListener("click", function(event) {
+                        const clickedOption = event.target;
+
+                        if (clickedOption.tagName === "OPTION") {
+                            if (clickedOption.classList.contains("checked")) {
+                                clickedOption.classList.remove("checked");
+                            } else {
+                                clickedOption.classList.add("checked");
+                            }
+                        }
+                    });
                 } else {
                     input = document.createElement('input');
                     input.setAttribute('type', 'text');

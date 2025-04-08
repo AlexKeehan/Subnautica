@@ -38,15 +38,15 @@
             {% for resource in resources_list %}
             <div class="item">
                 <div class="egg_pic">
-                    <img src="{% static 'img/Resources/'|add:resource.get_img_name %}" alt="{{ resource.resource }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:resource_view' resource_name=resource.get_resource_url %}">{{ resource.resource }}</a>
+                    <img src="{% static 'img/Resources/'|add:resource.get_img_name %}" alt="{{ resource.name }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:resource_view' resource_name=resource.get_resource_url %}">{{ resource.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ resource.obtain_from|convert_to_links|safe }}
                 </p>
                 <ul class="biome_resources">
-                    {% for location in resource.biomes %}
-                        <li><a href="{{ location.url }}">{{ location.name }}</a></li>
+                    {% for biome in resource.biomes.all %}
+                        <li><a href="{% url 'Subnautica:biome_view' biome_name=biome.get_biome_url %}">{{ biome.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

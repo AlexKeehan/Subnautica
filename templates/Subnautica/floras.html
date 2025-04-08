@@ -41,14 +41,14 @@
             {% for flora in floras_list %}
             <div class="item">
                 <div class="item_pic">
-                    <img src="{% static 'img/Flora/' %}{{ flora.get_img_name }}" alt="{{ flora.flora }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:flora_view' flora_name=flora.get_flora_url %}">{{ flora.flora }}</a>
+                    <img src="{% static 'img/Flora/' %}{{ flora.get_img_name }}" alt="{{ flora.name }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:flora_view' flora_name=flora.get_flora_url %}">{{ flora.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ flora.use }}
                 </p>
                 <ul class="biome_resources">
-                    {% for biome in flora.biomes %}
+                    {% for biome in flora.biomes.all %}
                     <li><a href="{{ biome.url }}">{{ biome.name }}</a></li>
                     {% endfor %}
                 </ul>

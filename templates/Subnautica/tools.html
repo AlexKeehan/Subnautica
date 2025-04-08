@@ -39,8 +39,8 @@
             {% for tool in tools_list %}
             <div class="item">
                 <div class="egg_pic">
-                    <img src="{% static 'img/Tools/'|add:tool.get_img_name %}" alt="{{ tool.tool }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:tool_view' tool_name=tool.get_tool_url %}">{{ tool.tool }}</a>
+                    <img src="{% static 'img/Tools/'|add:tool.get_img_name %}" alt="{{ tool.name }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:tool_view' tool_name=tool.get_tool_url %}">{{ tool.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ tool.short_description|convert_to_links|safe }}

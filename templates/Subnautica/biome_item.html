@@ -41,7 +41,7 @@
                 </ul>
                 <ul class="item_resources">
                     <li>Resources</li>
-                    {% for resource in biome.resources %}
+                    {% for resource in biome.resources.all %}
                     <li><a href="{{ resource.url }}" class="item_resources_text">{{ resource.name }}</a></li>
                 {% endfor %}
                 </ul>

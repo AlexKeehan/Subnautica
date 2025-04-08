@@ -1,8 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
-from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, user, \
-    admin_user
+from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, user, admin_user
 
 biomes_list = Biomes.objects.all()
 resources_list = Resources.objects.all()
@@ -20,10 +19,10 @@ def biomes_view(request):
     return render(request, 'subnautica/biomes.html', {"biomes_list": biomes_list})
 
 def biome_view(request, biome_name):
-    biome = next((biome for biome in biomes_list if biome.get_biome_url() == biome_name), None)
-
-    if biome is None:
-        return render(request, 'subnautica/biomes.html')
+    try:
+        biome = Biomes.objects.get(name=biome_name)
+    except Biomes.DoesNotExist:
+        return render(request, 'subnautica/biomes.html', {'error': 'Biome not found'})
 
     return render(request, f'subnautica/biome_item.html', {'biome': biome})
 
@@ -31,10 +30,10 @@ def tools_view(request):
     return render(request, 'subnautica/tools.html', {"tools_list": tools_list})
 
 def tool_view(request, tool_name):
-    tool = next((tool for tool in tools_list if tool.get_tool_url() == tool_name), None)
-
-    if tool is None:
-        return render(request, 'subnautica/tools.html')
+    try:
+        tool = Tools.objects.get(name=tool_name)
+    except Tools.DoesNotExist:
+        return render(request, 'subnautica/tools.html', {'error': 'Tool not found'})
 
     return render(request, f'subnautica/tool_item.html', {'tool': tool})
 
@@ -42,10 +41,10 @@ def vehicles_view(request):
     return render(request, 'subnautica/vehicles.html', {"vehicles_list": vehicles_list})
 
 def vehicle_view(request, vehicle_name):
-    vehicle = next((vehicle for vehicle in vehicles_list if vehicle.get_vehicle_url() == vehicle_name), None)
-
-    if vehicle is None:
-        return render(request, 'subnautica/vehicles.html')
+    try:
+        vehicle = Vehicles.objects.get(name=vehicle_name)
+    except Vehicles.DoesNotExist:
+        return render(request, 'subnautica/vehicles.html', {'error': 'Vehicle not found'})
 
     return render(request, f'subnautica/vehicle_item.html', {'vehicle': vehicle})
 
@@ -53,10 +52,10 @@ def resources_view(request):
     return render(request, 'subnautica/resources.html', {"resources_list": resources_list})
 
 def resource_view(request, resource_name):
-    resource = next((resource for resource in resources_list if resource.get_resource_url() == resource_name), None)
-
-    if resource is None:
-        return render(request, 'subnautica/resources.html')
+    try:
+        resource = Resources.objects.get(name=resource_name)
+    except Resources.DoesNotExist:
+        return render(request, 'subnautica/resources.html', {'error': 'Resource not found'})
 
     return render(request, f'subnautica/resource_item.html', {'resource': resource})
 
@@ -64,10 +63,10 @@ def floras_view(request):
     return render(request, 'subnautica/floras.html', {"floras_list": floras_list})
 
 def flora_view(request, flora_name):
-    flora = next((flora for flora in floras_list if flora.get_flora_url() == flora_name), None)
-
-    if flora is None:
-        return render(request, 'subnautica/floras.html')
+    try:
+        flora = Floras.objects.get(name=flora_name)
+    except Floras.DoesNotExist:
+        return render(request, 'subnautica/floras.html', {'error': 'Flora not found'})
 
     return render(request, f'subnautica/flora_item.html', {'flora': flora})
 
@@ -75,10 +74,10 @@ def faunas_view(request):
     return render(request, 'subnautica/faunas.html', {"faunas_list": faunas_list})
 
 def fauna_view(request, fauna_name):
-    fauna = next((fauna for fauna in faunas_list if fauna.get_fauna_url() == fauna_name), None)
-
-    if fauna is None:
-        return render(request, 'subnautica/faunas.html')
+    try:
+        fauna = Faunas.objects.get(name=fauna_name)
+    except Faunas.DoesNotExist:
+        return render(request, 'subnautica/faunas.html', {'error': 'Fauna not found'})
 
     return render(request, f'subnautica/fauna_item.html', {'fauna': fauna})
 
@@ -139,7 +138,7 @@ def add_item_view(request):
                     biome.resources.set(resources)
                     biome.save()
 
-                return redirect("subnautica:add_item_view")
+                return redirect("subnautica:biome_view", biome_name=biome.name)
             else:
                 return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
         elif model == "resources":
@@ -153,7 +152,7 @@ def add_item_view(request):
                 if biomes:
                     resource.biomes.set(biomes)
                     resource.save()
-                return redirect("subnautica:add_item_view")
+                return redirect("subnautica:resource_view", resource_name=resource.name)
             else:
                 print(form.errors)
                 return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
@@ -172,10 +171,13 @@ def add_item_view(request):
                 fauna = form.cleaned_data.get("fauna")
 
                 if fauna:
-                    egg.fauna = fauna
-
+                    try:
+                        egg.fauna = fauna
+                    except Faunas.DoesNotExist:
+                        return render(request, 'subnautica/add_item.html', {'error': "Fauna not found"})
                 egg.save()
-                return redirect("subnautica:add_item_view")
+                print(egg.fauna.name)
+                return redirect("subnautica:fauna_view", fauna_name=egg.fauna.name)
             else:
                 print(form.errors)
                 return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
@@ -190,7 +192,7 @@ def add_item_view(request):
                 if biomes:
                     flora.biomes.set(biomes)
                     flora.save()
-                return redirect("subnautica:add_item_view")
+                return redirect("subnautica:flora_view", flora_name=flora.name)
         elif model == "faunas":
             form = FaunasForm(request.POST)
             if form.is_valid():
@@ -202,17 +204,17 @@ def add_item_view(request):
                 if biomes:
                     fauna.biomes.set(biomes)
                     fauna.save()
-                return redirect("subnautica:add_item_view")
+                return redirect("subnautica:fauna_view", fauna_name=fauna.name)
         elif model == "tools":
             form = ToolsForm(request.POST)
             if form.is_valid():
-                form.save()
-            return redirect("subnautica:add_item_view")
+                tool = form.save()
+            return redirect("subnautica:tool_view", tool_name=tool.name)
         elif model == "vehicles":
             form = VehiclesForm(request.POST)
             if form.is_valid():
-                form.save()
-            return redirect("subnautica:add_item_view")
+                vehicle = form.save()
+            return redirect("subnautica:vehicles_view", vehicle_name=vehicle.name)
         else:
             return render(request, 'subnautica/add_item.html', {'error': "Invalid Model"})
 
@@ -232,24 +234,7 @@ def edit_item_view(request):
         model = request.GET.get("select_model", "biomes")
 
     item_id = request.GET.get("item_id")
-
-    if model == "biomes":
-        item_list = Biomes.objects.all()
-    elif model == "faunas":
-        item_list = Faunas.objects.all()
-    elif model == "eggs":
-        item_list = Eggs.objects.all()
-    elif model == "floras":
-        item_list = Floras.objects.all()
-    elif model == "vehicles":
-        item_list = Vehicles.objects.all()
-    elif model == "tools":
-        item_list = Tools.objects.all()
-    elif model == "resources":
-        item_list = Resources.objects.all()
-    else:
-        item_list = []
-
+    item_list = get_item_list(model)
     selected_item = get_selected_item(model, item_id)
 
     if request.method == "POST":
@@ -270,7 +255,7 @@ def edit_item_view(request):
                 selected_item.resources.set(resources)
 
                 selected_item.save()
-                return redirect('subnautica:edit_item_view')
+                return redirect('subnautica:biome_view', biome_name=selected_item.name)
             elif model == "eggs":
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
@@ -284,7 +269,7 @@ def edit_item_view(request):
                 selected_item.biomes.set(biomes)
 
                 selected_item.save()
-                return redirect('subnautica:edit_item_view')
+                return redirect('subnautica:fauna_view', fauna_name=selected_item.name)
             elif model == "floras":
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
@@ -297,7 +282,7 @@ def edit_item_view(request):
                 selected_item.growth_time = request.POST.get("growth_time")
 
                 selected_item.save()
-                return redirect('subnautica:edit_item_view')
+                return redirect('subnautica:flora_view', flora_name=selected_item.name)
             elif model == "faunas":
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
@@ -308,7 +293,7 @@ def edit_item_view(request):
                 selected_item.biomes.set(biomes)
 
                 selected_item.save()
-                return redirect('subnautica:edit_item_view')
+                return redirect('subnautica:fauna_view', fauna_name=selected_item.name)
             elif model == "resources":
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
@@ -319,7 +304,7 @@ def edit_item_view(request):
                 selected_item.size = request.POST.get("size")
 
                 selected_item.save()
-                return redirect('subnautica:edit_item_view')
+                return redirect('subnautica:resources_view', resource_name=selected_item.name)
             elif model == "tools":
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
@@ -339,7 +324,7 @@ def edit_item_view(request):
                 selected_item.acq_from = request.POST.get("acq_from")
 
                 selected_item.save()
-                return redirect('subnautica:edit_item_view')
+                return redirect('subnautica:vehicle_view', vehicle_name=selected_item.name)
     image_path = selected_item.get_img_path() if selected_item else None
 
 
@@ -375,54 +360,41 @@ def get_selected_item(model, item_id):
         print("Error fetching selected item during POST:", e)
         return None
 
+# Helper function to get the item list from the model
+# Used in editing and deleting
+def get_item_list(model):
+    if model == "biomes":
+        return Biomes.objects.all()
+    elif model == "faunas":
+        return Faunas.objects.all()
+    elif model == "eggs":
+        return Eggs.objects.all()
+    elif model == "floras":
+        return Floras.objects.all()
+    elif model == "vehicles":
+        return Vehicles.objects.all()
+    elif model == "tools":
+        return Tools.objects.all()
+    elif model == "resources":
+        return Resources.objects.all()
+    else:
+        return []
+
 def del_item_view(request):
     model = request.GET.get("select_model")
     item_id = request.GET.get("item_id")
-    selected_item = None
-    item_list = []
 
-    if not model:
-        model = request.GET.get("select_model", "biomes")
+    item_list = get_item_list(model)
 
-    if model == "biomes":
-        item_list = biomes_list
-    elif model == "faunas":
-        item_list = faunas_list
-    elif model == "eggs":
-        item_list = eggs_list
-    elif model == "floras":
-        item_list = floras_list
-    elif model == "vehicles":
-        item_list = vehicles_list
-    elif model == "tools":
-        item_list = tools_list
-    elif model == "resources":
-        item_list = resources_list
-    else:
-        model = None
+    selected_item = get_selected_item(model, item_id)
 
-    if item_id:
-        if model == "biomes":
-            selected_item = next((item for item in biomes_list if item.get_biome_url() == item_id), None)
-        elif model == "faunas":
-            selected_item = next((item for item in faunas_list if item.get_fauna_url() == item_id), None)
-        elif model == "eggs":
-            selected_item = next((item for item in eggs_list if item.get_egg_url() == item_id), None)
-        elif model == "floras":
-            selected_item = next((item for item in floras_list if item.get_flora_url() == item_id), None)
-        elif model == "vehicles":
-            selected_item = next((item for item in vehicles_list if item.get_vehicle_url() == item_id), None)
-        elif model == "tools":
-            selected_item = next((item for item in tools_list if item.get_tool_url() == item_id), None)
-        elif model == "resources":
-            selected_item = next((item for item in resources_list if item.get_resource_url() == item_id), None)
-        else:
-            selected_item = None
-
-    if request.method == "POST" and selected_item:
-        if model == "biomes":
-            biomes_list.remove(selected_item)
-            return JsonResponse({"success": True, "message": "Item Deleted Successfully"})
+    if request.method == "POST":
+        item_id = request.POST.get("item_id")
+        model = request.POST.get("select_model")
+        item = get_selected_item(model, item_id)
+        if item:
+            item.delete()
+            return redirect(f'subnautica:{model}_view')
     return render(request, 'subnautica/del_item.html', {
         "model": model,
         "item_list": item_list,

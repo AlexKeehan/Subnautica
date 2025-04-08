@@ -17,4 +17,3 @@ class Biomes(models.Model):
 
     def get_img_path(self):
         return f"img/Biomes/{self.get_img_name()}"
-

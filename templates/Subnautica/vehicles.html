@@ -37,8 +37,8 @@
             {% for vehicle in vehicles_list %}
             <div class="item">
                 <div class="item_pic">
-                    <img src="{% static 'img/Vehicles/'|add:vehicle.get_img_name %}" alt="{{ vehicle.vehicle }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:vehicle_view' vehicle_name=vehicle.get_vehicle_url %}">{{ vehicle.vehicle }}</a>
+                    <img src="{% static 'img/Vehicles/'|add:vehicle.get_img_name %}" alt="{{ vehicle.name }} image" class="item_img" />
+                    <a class="item_name" href="{% url 'subnautica:vehicle_view' vehicle_name=vehicle.get_vehicle_url %}">{{ vehicle.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ vehicle.short_description|safe }}
