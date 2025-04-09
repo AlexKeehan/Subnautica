@@ -41,8 +41,8 @@
                 </ul>
                 <ul class="item_resources">
                     <li>Biome</li>
-                    {% for location in resource.biomes.all %}
-                    <li><a href="{{ location.url }}" class="item_resources_text">{{ location.name }}</a></li>
+                    {% for biome in resource.biomes.all %}
+                    <li><a href="{% url "Subnautica:biome_view" biome_name=biome.name %}" class="item_resources_text">{{ biome.name }}</a></li>
                 {% endfor %}
                 </ul>
 

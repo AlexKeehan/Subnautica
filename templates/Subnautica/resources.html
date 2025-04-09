@@ -63,7 +63,7 @@
                 </p>
                 <ul class="biome_resources">
                     {% for biome in resource.biomes.all %}
-                        <li><a href="{% url 'Subnautica:biome_view' biome_name=biome.get_biome_url %}">{{ biome.name }}</a></li>
+                        <li><a href="{% url 'Subnautica:biome_view' biome_name=biome.name %}">{{ biome.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

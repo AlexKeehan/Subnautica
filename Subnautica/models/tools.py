@@ -5,7 +5,7 @@ class Tools(models.Model):
     description = models.CharField(max_length=500)
     short_description = models.CharField(max_length=300)
     tool_type = models.CharField(max_length=100)
-    build_time = models.IntegerField()
+    build_time = models.CharField(max_length=50)
     attribute = models.CharField(max_length=100)
 
     def get_img_name(self):

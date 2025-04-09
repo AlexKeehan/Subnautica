@@ -501,7 +501,7 @@ def edit_item_view(request):
                 messages.info(request, f"Resource {selected_item.name} has been successfully edited")
 
                 # Redirect to edited page
-                return redirect('subnautica:resources_view', resource_name=selected_item.name)
+                return redirect('subnautica:resource_view', resource_name=selected_item.name)
             elif model == "tools":
                 # Set new data
                 selected_item.name = request.POST.get("name")

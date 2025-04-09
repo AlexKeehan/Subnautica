@@ -267,7 +267,6 @@
                         <label for="attribute">Attribute: </label>
                         <input type="text" name="attribute" id="attribute" value="{{ selected_item.attribute }}">
                     </div>
-                    {% endif %}
                 {% endif %}
 
                 {% if model == "vehicles" %}
@@ -287,11 +286,6 @@
                     </div>
 
                     <div class="input_info">
-                        <label for="tool_type">Tool Type: </label>
-                        <input type="text" name="tool_type" id="tool_type" value="{{ selected_item.tool_type }}">
-                    </div>
-
-                    <div class="input_info">
                         <label for="velocity">Velocity: </label>
                         <input type="text" name="velocity" id="velocity" value="{{ selected_item.velocity }}">
                     </div>
@@ -306,6 +300,7 @@
                         <input type="text" name="acq_from" id="acq_from" value="{{ selected_item.acq_from }}">
                     </div>
                     {% endif %}
+                {% endif %}
 
                 <div class="input_info">
                     <label for="item_image">Item Image: </label>

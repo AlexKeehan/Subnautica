@@ -2,10 +2,10 @@ from django.db import models
 
 class Biomes(models.Model):
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=1000)
     short_description = models.CharField(max_length=300)
     biome_type = models.CharField(max_length=50)
-    depth_range = models.IntegerField(default=0)
+    depth_range = models.CharField(max_length=50)
     temp_range = models.CharField(max_length=100)
     resources = models.ManyToManyField('Resources', related_name='biomes_resources')
 
