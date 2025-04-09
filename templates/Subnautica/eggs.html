@@ -7,6 +7,15 @@
 {% endblock %}
 
 {%  block main_wrapper %}
+    {% if messages %}
+        <div class="message_wrapper">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="info_main_wrapper">
             <section class="ex_info_section">
@@ -23,7 +32,7 @@
             <section class="ex_pic_section">
                 <h3 class="ex_pic_title">Ampeel Egg</h3>
                 <img src="{% static "img/Eggs/ampeel_egg.webp" %}" alt="example egg" class="ex_pic" />
-                <a href="{% url "Subnautica:fauna_view" fauna_name="ampeel" %}" class="ex_link">Ampeel Egg</a>
+                <a href="{% url "Subnautica:fauna_view" fauna_name="Ampeel" %}" class="ex_link">Ampeel Egg</a>
             </section>
     </div>
     <div class="list_main_wrapper">
@@ -45,7 +54,7 @@
             <div class="item">
                 <div class="egg_pic">
                     <img src="{% static 'img/Eggs/'|add:egg.get_img_name %}" alt="{{ egg.name }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:fauna_view' fauna_name=egg.get_fauna_url %}">{{ egg.fauna.name }}</a>
+                    <a class="item_name" href="{% url 'subnautica:fauna_view' fauna_name=egg.fauna.name %}">{{ egg.fauna.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ egg.description|convert_to_links|safe }}

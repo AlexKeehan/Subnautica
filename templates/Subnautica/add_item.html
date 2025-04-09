@@ -11,12 +11,18 @@
         <main class="add_item_layout">
             <div class="add_item_info_section">
                 <h1>Add Item</h1>
+
+                {% if error %}
+                    <div class="error_msg">
+                        <p>{{ error }}</p>
+                    </div>
+                {% endif %}
                 <form id="add_item_form" action="{% url "Subnautica:add_item_view" %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" id="add_item_url" value="{% url "Subnautica:add_item_view" %}">
                     <div class="input_info">
                         <label for="select_model">Select Model: </label>
-                        <select id="select_model" name="select_model">
+                        <select id="select_model" name="select_model" onchange="showSubmitButton()">
                             <option value="biomes">Biomes</option>
                             <option value="eggs">Eggs</option>
                             <option value="faunas">Faunas</option>
@@ -39,7 +45,6 @@
 
 {% block js %}
     <script src="{%  static "js/add_item.js" %}"></script>
-
     <script>
         const getDropDownData = "{% url 'Subnautica:get_dropdown_data_view' %}"
     </script>

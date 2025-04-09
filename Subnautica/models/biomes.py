@@ -12,8 +12,5 @@ class Biomes(models.Model):
     def get_img_name(self):
         return self.name.lower().replace(" ", "_") + ".webp"
 
-    def get_biome_url(self):
-        return self.name.lower().replace(" ", "_")
-
     def get_img_path(self):
         return f"img/Biomes/{self.get_img_name()}"

@@ -7,6 +7,15 @@
 {% endblock %}
 
 {%  block main_wrapper %}
+    {% if messages %}
+        <div class="message_wrapper">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="info_main_wrapper">
             <section class="ex_info_section">
@@ -19,7 +28,7 @@
             <section class="ex_pic_section">
                 <h3 class="ex_pic_title">Safe Shallows</h3>
                 <img src="{% static "img/Tools/survival_knife.webp" %}" alt="example tool" class="ex_pic" />
-                <a href="{% url "Subnautica:tool_view" tool_name="survival_knife" %}" class="ex_link">Survival Knife</a>
+                <a href="{% url "Subnautica:tool_view" tool_name="Survival Knife" %}" class="ex_link">Survival Knife</a>
             </section>
     </div>
     <div class="list_main_wrapper">
@@ -40,7 +49,7 @@
             <div class="item">
                 <div class="egg_pic">
                     <img src="{% static 'img/Tools/'|add:tool.get_img_name %}" alt="{{ tool.name }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:tool_view' tool_name=tool.get_tool_url %}">{{ tool.name }}</a>
+                    <a class="item_name" href="{% url 'subnautica:tool_view' tool_name=tool.name %}">{{ tool.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ tool.short_description|convert_to_links|safe }}

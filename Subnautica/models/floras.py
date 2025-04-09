@@ -12,10 +12,5 @@ class Floras(models.Model):
     def get_img_name(self):
         return self.name.lower().replace(" ", "_") + ".webp"
 
-    def get_flora_url(self):
-        flora_url = self.name.lower().replace(" ", "_")
-        print(f"Flora URL: {flora_url}")
-        return flora_url
-
     def get_img_path(self):
         return f"img/Flora/{self.get_img_name()}"

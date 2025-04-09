@@ -7,6 +7,15 @@
 {% endblock %}
 
 {%  block main_wrapper %}
+    {% if messages %}
+        <div class="message_wrapper">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="info_main_wrapper">
             <section class="ex_info_section">
@@ -20,7 +29,7 @@
             <section class="ex_pic_section">
                 <h3 class="ex_pic_title">Bloodroot</h3>
                 <img src="{% static "img/Flora/bloodroot.webp" %}" alt="example flora" class="ex_pic" />
-                <a href="{% url "Subnautica:flora_view" flora_name="bloodroot" %}" class="ex_link">Bloodroot</a>
+                <a href="{% url "Subnautica:flora_view" flora_name="Bloodroot" %}" class="ex_link">Bloodroot</a>
             </section>
     </div>
     <div class="list_main_wrapper">
@@ -42,7 +51,7 @@
             <div class="item">
                 <div class="item_pic">
                     <img src="{% static 'img/Flora/' %}{{ flora.get_img_name }}" alt="{{ flora.name }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:flora_view' flora_name=flora.get_flora_url %}">{{ flora.name }}</a>
+                    <a class="item_name" href="{% url 'subnautica:flora_view' flora_name=flora.name %}">{{ flora.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ flora.use }}

@@ -90,21 +90,19 @@ document.getElementById("select_model").addEventListener("change", function() {
                     input.classList.add('dropdown');
 
                     if (field.name === "fauna" && data.faunas) {
-                        data.faunas.forEach(fauna => {
-                            const option = document.createElement("option");
-                            option.value = fauna.id;
-                            option.textContent = fauna.name;
-                            input.appendChild(option);
-                        })
+                        input = document.createElement('select');
+                        input.setAttribute('id', field.name);
+                        input.setAttribute('name', field.name);
+                        input.classList.add('dropdown');
+                        populateDropdown(input, data.faunas, "fauna");
                     }
 
                     if (field.name === "biomes" && data.biomes) {
-                        data.biomes.forEach(biome => {
-                            const option = document.createElement('option');
-                            option.value = biome.id;
-                            option.textContent = biome.name;
-                            input.appendChild(option);
-                        });
+                        populateDropdown(input, data.biomes, "biome")
+                    }
+
+                    if (field.name === "resources" && data.resources) {
+                        populateDropdown(input, data.resources, "resource");
                     }
 
                     // Checkmark functionality
@@ -136,4 +134,28 @@ document.getElementById("select_model").addEventListener("change", function() {
     .catch(error => console.error("Error Getting Data", error));
 });
 
-imageDisplay()
+function populateDropdown(selectElement, dataArray, dataType) {
+    selectElement.innerHTML = '';
+
+    dataArray.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item.name;
+        selectElement.appendChild(option);
+        console.log(`Added ${dataType} option:`, item.name);
+    });
+}
+
+function showSubmitButton() {
+    var selModel = document.getElementById("select_model").valueOf()
+
+    if (selModel !== "") {
+        document.querySelector(".submit_button").style.display = "block";
+    } else {
+        document.querySelector(".submit_button").style.display = "none";
+    }
+}
+
+window.onload = function() {
+    showSubmitButton();
+}

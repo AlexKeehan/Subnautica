@@ -7,6 +7,15 @@
 {% endblock %}
 
 {%  block main_wrapper %}
+    {% if messages %}
+        <div class="message_wrapper">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="info_main_wrapper">
             <section class="ex_info_section">
@@ -21,7 +30,7 @@
             <section class="ex_pic_section">
                 <h3 class="ex_pic_title">Safe Shallows</h3>
                 <img src="{% static "img/Biomes/safe_shallows.webp" %}" alt="example biome" class="ex_pic" />
-                <a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}" class="ex_link">Safe Shallows</a>
+                <a href="{% url "Subnautica:biome_view" biome_name="Safe Shallows" %}" class="ex_link">Safe Shallows</a>
             </section>
     </div>
     <div class="list_main_wrapper">
@@ -32,10 +41,18 @@
         <section class="item_list">
             <!-------------------------------------------->
             <div class="list_header">
-                <p>Biome</p>
+                <p class="sort_wrapper">Biome
+                    <a href="{% url 'subnautica:biomes_view' %}?sort_by=alphabet&order={% if request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="alphabet_sort">
+                        <img src="{% static 'img/alphabetical_sort.jpg' %}" alt="Sort Alphabetically" class="sort_icon"/>
+                    </a>
+                </p>
                 <p>Description</p>
                 <p>Depth Range</p>
-                <p>Resources</p>
+                <p class="sort_wrapper">Resources
+                    <a href="{% url 'subnautica:biomes_view' %}?sort_by=count&order={% if request.GET.order == 'desc' %}asc{% else %}desc{% endif %}" class="count_sort">                    
+                        <img src="{% static 'img/count_sort.jpg' %}" alt="Sort by Resources" class="sort_icon"/>
+                    </a>
+                </p>
             </div>
 
             <!-------------------------------------------->
@@ -43,7 +60,7 @@
             <div class="item">
                 <div class="item_pic">
                     <img src="{% static 'img/Biomes/'|add:biome.get_img_name %}" alt="{{ biome.name }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:biome_view' biome_name=biome.get_biome_url %}">{{ biome.name }}</a>
+                    <a class="item_name" href="{% url 'subnautica:biome_view' biome_name=biome.name %}">{{ biome.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ biome.short_description|convert_to_links|safe }}

@@ -10,9 +10,6 @@ class Eggs(models.Model):
     def get_img_name(self):
         return self.name.lower().replace(" ", "_") + ".webp"
 
-    def get_egg_url(self):
-        return self.name.lower().replace(" ", "_")
-
     def get_img_path(self):
         return f"img/Eggs/{self.get_img_name()}"
 

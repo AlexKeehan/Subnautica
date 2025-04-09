@@ -6,6 +6,16 @@
 {% endblock %}
 
 {%  block main_wrapper %}
+    {% if messages %}
+        <div class="message_wrapper">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="info_main_wrapper">
             <section class="ex_info_section">
                 <h2 class="ex_title">Vehicles</h2>
@@ -17,7 +27,7 @@
             <section class="ex_pic_section">
                 <h3 class="ex_pic_title">Seamoth</h3>
                 <img src="{% static "img/Vehicles/seamoth.webp" %}" alt="example vehicle" class="ex_pic" />
-                <a href="{% url "Subnautica:vehicle_view" vehicle_name="seamoth" %}" class="ex_link">Seamoth</a>
+                <a href="{% url "Subnautica:vehicle_view" vehicle_name="Seamoth" %}" class="ex_link">Seamoth</a>
             </section>
     </div>
     <div class="list_main_wrapper">
@@ -38,7 +48,7 @@
             <div class="item">
                 <div class="item_pic">
                     <img src="{% static 'img/Vehicles/'|add:vehicle.get_img_name %}" alt="{{ vehicle.name }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:vehicle_view' vehicle_name=vehicle.get_vehicle_url %}">{{ vehicle.name }}</a>
+                    <a class="item_name" href="{% url 'subnautica:vehicle_view' vehicle_name=vehicle.name %}">{{ vehicle.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ vehicle.short_description|safe }}

@@ -10,8 +10,5 @@ class Faunas(models.Model):
     def get_img_name(self):
         return self.name.lower().replace(" ", "_") + ".webp"
 
-    def get_fauna_url(self):
-        return self.name.lower().replace(" ", "_")
-
     def get_img_path(self):
         return f"img/Fauna/{self.get_img_name()}"

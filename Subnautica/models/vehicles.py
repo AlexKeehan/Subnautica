@@ -11,8 +11,5 @@ class Vehicles(models.Model):
     def get_img_name(self):
         return self.name.lower().replace(" ", "_") + ".webp"
 
-    def get_vehicle_url(self):
-        return self.name.lower().replace(" ", "_")
-
     def get_img_path(self):
         return f"img/Vehicles/{self.get_img_name()}"

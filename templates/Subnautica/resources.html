@@ -7,6 +7,15 @@
 {% endblock %}
 
 {%  block main_wrapper %}
+    {% if messages %}
+        <div class="message_wrapper">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="info_main_wrapper">
             <section class="ex_info_section">
@@ -18,7 +27,7 @@
             <section class="ex_pic_section">
                 <h3 class="ex_pic_title">Titanium</h3>
                 <img src="{% static "img/Resources/titanium.webp" %}" alt="example resource" class="ex_pic" />
-                <a href="{% url "Subnautica:resource_view" resource_name="titanium" %}" class="ex_link">Titanium</a>
+                <a href="{% url "Subnautica:resource_view" resource_name="Titanium" %}" class="ex_link">Titanium</a>
             </section>
     </div>
     <div class="list_main_wrapper">
@@ -39,7 +48,7 @@
             <div class="item">
                 <div class="egg_pic">
                     <img src="{% static 'img/Resources/'|add:resource.get_img_name %}" alt="{{ resource.name }} image" class="item_img" />
-                    <a class="item_name" href="{% url 'subnautica:resource_view' resource_name=resource.get_resource_url %}">{{ resource.name }}</a>
+                    <a class="item_name" href="{% url 'subnautica:resource_view' resource_name=resource.name %}">{{ resource.name }}</a>
                 </div>
                 <p class="item_desc">
                     {{ resource.obtain_from|convert_to_links|safe }}

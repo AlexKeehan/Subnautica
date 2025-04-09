@@ -51,6 +51,7 @@ h1 {
 }
 
 .submit_button {
+    display: none;
     height: 75%;
     width: 75%;
 }

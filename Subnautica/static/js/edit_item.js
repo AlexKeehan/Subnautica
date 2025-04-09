@@ -37,3 +37,31 @@ function imageDisplay() {
         });
     });
 }
+
+function checkmarkLogic(selElement) {
+    const selectedOptions = Array.from(selElement.selectedOptions);
+    selectedOptions.forEach(option => {
+        option.style.backgroundColor = '#D3F9D8';
+    });
+
+    const allOptions = Array.from(selElement.options);
+    allOptions.forEach(option => {
+        if (!option.selected) {
+            option.style.backgroundColor = '';
+        }
+    });
+}
+
+function mulListeners() {
+        const multipleSelects = document.querySelectorAll('select[multiple]');
+        multipleSelects.forEach(selElement => {
+            selElement.addEventListener('change', function() {
+                checkmarkLogic(selElement);
+            });
+            checkmarkLogic(selElement);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        mulListeners();
+    });

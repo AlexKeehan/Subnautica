@@ -1,9 +1,10 @@
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .forms import *
 from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, user, admin_user
 
-biomes_list = Biomes.objects.all()
+# Get all items from models for use in url parameters
 resources_list = Resources.objects.all()
 tools_list = Tools.objects.all()
 vehicles_list = Vehicles.objects.all()
@@ -11,11 +12,26 @@ faunas_list = Faunas.objects.all()
 floras_list = Floras.objects.all()
 eggs_list = Eggs.objects.all()
 
-# Create your views here.
+# Base view
 def subnautica_view(request):
     return render(request, 'subnautica/index.html')
 
 def biomes_view(request):
+    sort_by = request.GET.get('sort_by', None)
+    order = request.GET.get('order', 'asc')
+
+    if sort_by == "alphabet":
+        if order == "asc":
+            biomes_list = Biomes.objects.all().order_by('name')
+        else:
+            biomes_list = Biomes.objects.all().order_by('-name')
+    elif sort_by == "count":
+        if order == "asc":
+            biomes_list = Biomes.objects.all().annotate(num_items=models.Count("resources")).order_by('num_items')
+        else:
+            biomes_list = Biomes.objects.all().annotate(num_items=models.Count("resources")).order_by('-num_items')
+    else:
+        biomes_list = Biomes.objects.all()
     return render(request, 'subnautica/biomes.html', {"biomes_list": biomes_list})
 
 def biome_view(request, biome_name):
@@ -87,24 +103,36 @@ def eggs_view(request):
 def search_view(request):
     query = request.GET.get('query', '')
 
-    filtered_biomes = [biome for biome in biomes_list if query.lower() in biome.biome.lower()]
+    # Assume that biome is the only thing to search for
+    if query:
+        filtered_items = Biomes.objects.filter(name__icontains=query)
+    else:
+        filtered_items = Biomes.objects.all()
 
-    return render(request, 'subnautica/search_results.html', {'query': query, 'biomes': filtered_biomes})
+    return render(request, 'subnautica/search_results.html', {'query': query, 'biomes': filtered_items})
 
 def login_view(request):
+    # If form is submitted
     if request.method == "POST":
+        # Get credentials
         username = request.POST.get("username")
         pw = request.POST.get("password")
+
+        # Check hardcoded values for correct login
+        # Normal user login
         if username == user["username"] and pw == user["password"]:
             request.session["username"] = username
             request.session["role"] = "user"
             return redirect("subnautica:user_index_view")
+        # Admin login
         elif username == admin_user["username"] and pw == admin_user["password"]:
             request.session["username"] = username
             request.session["role"] = "admin"
             return redirect("subnautica:admin_user_view")
+        # Failed login
         else:
             return render(request, 'subnautica/login.html', {"error_msg": "Invalid username or password"})
+    # Form is not submitted, so just show login page
     else:
         return render(request, 'subnautica/login.html')
 
@@ -122,52 +150,76 @@ def logout_view(request):
 def signup_view(request):
     return render(request, 'subnautica/signup.html')
 
+# View that handles adding new item logic
 def add_item_view(request):
+    # If form is submitted
     if request.method == "POST":
+        # Get model
         model = request.POST.get("select_model")
 
+        # Use Biomes as base model
+        if not model:
+            model = request.GET.get("select_model", "biomes")
+
+        # Check for which model it is
         if model == "biomes":
+            # Get form
             form = BiomesForm(request.POST)
             if form.is_valid():
+                # Save new data
                 biome = form.save(commit=False)
                 biome.save()
 
+                # Handle ManyToMany relationship seperate
                 resources = form.cleaned_data.get("resources")
 
                 if resources:
                     biome.resources.set(resources)
                     biome.save()
 
+                # Send success message
+                messages.success(request, f"Biome {biome.name} has been added")
+
+                # Redirect to new page
                 return redirect("subnautica:biome_view", biome_name=biome.name)
             else:
-                return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
+                return render(request, 'subnautica/add_item.html', {'form': form, 'error': f"Form not valid: \n{form.errors}"})
         elif model == "resources":
+            # Get form
             form = ResourcesForm(request.POST)
             if form.is_valid():
                 resource = form.save(commit=False)
                 resource.save()
 
+                # Handle biomes seperate
                 biomes = form.cleaned_data.get("biomes")
 
                 if biomes:
                     resource.biomes.set(biomes)
                     resource.save()
+
+                # Send success message
+                messages.success(request, f"Resource {resource.name} has been added")
+
+                # Redirect to new page
                 return redirect("subnautica:resource_view", resource_name=resource.name)
             else:
-                print(form.errors)
-                return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
+                return render(request, 'subnautica/add_item.html',{'form': form, 'error': f"Form not valid: \n{form.errors}"})
         elif model == "eggs":
+            # Get form
             form = EggsForm(request.POST)
             if form.is_valid():
                 egg = form.save(commit=False)
                 egg.save()
 
+                # Handle biomes seperate
                 biomes = form.cleaned_data.get("biomes")
 
                 if biomes:
                     egg.biomes.set(biomes)
                     egg.save()
 
+                # Handle fauna seperate
                 fauna = form.cleaned_data.get("fauna")
 
                 if fauna:
@@ -176,74 +228,118 @@ def add_item_view(request):
                     except Faunas.DoesNotExist:
                         return render(request, 'subnautica/add_item.html', {'error': "Fauna not found"})
                 egg.save()
-                print(egg.fauna.name)
+
+                # Send success message
+                messages.success(request, f"Egg {egg.name} has been added")
+
+                # Redirect to new page
                 return redirect("subnautica:fauna_view", fauna_name=egg.fauna.name)
             else:
-                print(form.errors)
-                return render(request, 'subnautica/add_item.html', {'form': form, 'error': "Form is not valid"})
+                return render(request, 'subnautica/add_item.html', {'form': form, 'error': f"Form not valid: \n{form.errors}"})
         elif model == "floras":
+            # Get form
             form = FlorasForm(request.POST)
             if form.is_valid():
                 flora = form.save(commit=False)
                 flora.save()
 
+                # Handle seperate
                 biomes = form.cleaned_data.get("biomes")
 
                 if biomes:
                     flora.biomes.set(biomes)
                     flora.save()
+
+                # Send success message
+                messages.success(request, f"Flora {flora.name} has been added")
+
+                # Redirect to new page
                 return redirect("subnautica:flora_view", flora_name=flora.name)
+            else:
+                return render(request, 'subnautica/add_item.html', {'form': form, 'error': f"Form not valid: \n{form.errors}"})
         elif model == "faunas":
+            # Get form
             form = FaunasForm(request.POST)
             if form.is_valid():
                 fauna = form.save(commit=False)
                 fauna.save()
 
+                # Handle seperate
                 biomes = form.cleaned_data.get("biomes")
 
                 if biomes:
                     fauna.biomes.set(biomes)
                     fauna.save()
+
+                # Send success message
+                messages.success(request, f"Fauna {fauna.name} has been added")
+
+                # Redirect to new page
                 return redirect("subnautica:fauna_view", fauna_name=fauna.name)
+            else:
+                return render(request, 'subnautica/add_item.html',{'form': form, 'error': f"Form not valid: \n{form.errors}"})
         elif model == "tools":
+            # Get form
             form = ToolsForm(request.POST)
             if form.is_valid():
                 tool = form.save()
-            return redirect("subnautica:tool_view", tool_name=tool.name)
+
+                # Send success message
+                messages.success(request, f"Tool {tool.name} has been added")
+
+                # Redirect to new page
+                return redirect("subnautica:tool_view", tool_name=tool.name)
+            else:
+                return render(request, 'subnautica/add_item.html',{'form': form, 'error': f"Form not valid: \n{form.errors}"})
         elif model == "vehicles":
+            # Get form
             form = VehiclesForm(request.POST)
             if form.is_valid():
                 vehicle = form.save()
-            return redirect("subnautica:vehicles_view", vehicle_name=vehicle.name)
-        else:
-            return render(request, 'subnautica/add_item.html', {'error': "Invalid Model"})
 
+                # Send success message
+                messages.success(request, f"Vehicle {vehicle.name} has been added")
+
+                # Redirect to new page
+                return redirect("subnautica:vehicles_view", vehicle_name=vehicle.name)
+            else:
+                return render(request, 'subnautica/add_item.html',{'form': form, 'error': f"Form not valid: \n{form.errors}"})
+        else:
+            return render(request, 'subnautica/add_item.html')
     else:
+        # Have biomes be the default model shown
         model = request.GET.get("select_model")
         if model == "biomes":
             resources_qs = Resources.objects.all()
             form = BiomesForm()
             form.fields["resources"].queryset = resources_qs
         else:
-            return render(request, 'subnautica/add_item.html', {'error': "No model selected"})
+            return render(request, 'subnautica/add_item.html')
 
+# View to handle editing of an existing item
 def edit_item_view(request):
+    # Get model
     model = request.GET.get("select_model")
 
+    # Let Biomes be the default model shown
     if not model:
         model = request.GET.get("select_model", "biomes")
 
+    # Get item id and then use helper functions to get items associated with that model and the specific item from that item id
     item_id = request.GET.get("item_id")
     item_list = get_item_list(model)
     selected_item = get_selected_item(model, item_id)
 
     if request.method == "POST":
+        # Refresh these because they don't carry over
         item_id = request.POST.get("item_id")
         model = request.POST.get("select_model")
         selected_item = get_selected_item(model, item_id)
 
         if selected_item:
+            # Check which model the selected item falls within
             if model == "biomes":
+                # Set new data
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
                 selected_item.short_description = request.POST.get("short_description")
@@ -255,8 +351,14 @@ def edit_item_view(request):
                 selected_item.resources.set(resources)
 
                 selected_item.save()
+
+                # Send info message
+                messages.info(request, f"Biome {selected_item.name} has been successfully edited")
+
+                # Redirect to edited page
                 return redirect('subnautica:biome_view', biome_name=selected_item.name)
             elif model == "eggs":
+                # Set new data
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
                 selected_item.attitude = request.POST.get("attitude")
@@ -269,8 +371,14 @@ def edit_item_view(request):
                 selected_item.biomes.set(biomes)
 
                 selected_item.save()
+
+                # Send info message
+                messages.info(request, f"Egg {selected_item.name} has been successfully edited")
+
+                # Redirect to edited page
                 return redirect('subnautica:fauna_view', fauna_name=selected_item.name)
             elif model == "floras":
+                # Set new data
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
                 selected_item.use = request.POST.get("use")
@@ -282,8 +390,14 @@ def edit_item_view(request):
                 selected_item.growth_time = request.POST.get("growth_time")
 
                 selected_item.save()
+
+                # Send info message
+                messages.info(request, f"Flora {selected_item.name} has been successfully edited")
+
+                # Redirect to edited page
                 return redirect('subnautica:flora_view', flora_name=selected_item.name)
             elif model == "faunas":
+                # Set new data
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
                 selected_item.type = request.POST.get("type")
@@ -293,8 +407,14 @@ def edit_item_view(request):
                 selected_item.biomes.set(biomes)
 
                 selected_item.save()
+
+                # Send info message
+                messages.info(request, f"Fauna {selected_item.name} has been successfully edited")
+
+                # Redirect to edited page
                 return redirect('subnautica:fauna_view', fauna_name=selected_item.name)
             elif model == "resources":
+                # Set new data
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
                 selected_item.obtain_from = request.POST.get("obtain_from")
@@ -304,8 +424,14 @@ def edit_item_view(request):
                 selected_item.size = request.POST.get("size")
 
                 selected_item.save()
+
+                # Send info message
+                messages.info(request, f"Resource {selected_item.name} has been successfully edited")
+
+                # Redirect to edited page
                 return redirect('subnautica:resources_view', resource_name=selected_item.name)
             elif model == "tools":
+                # Set new data
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
                 selected_item.short_description = request.POST.get("short_description")
@@ -314,8 +440,14 @@ def edit_item_view(request):
                 selected_item.attribute = request.POST.get("attribute")
 
                 selected_item.save()
+
+                # Send info message
+                messages.info(request, f"Tool {selected_item.name} has been successfully edited")
+
+                # Redirect to edited page
                 return redirect('subnautica:edit_item_view')
             elif model == "vehicles":
+                # Set new data
                 selected_item.name = request.POST.get("name")
                 selected_item.description = request.POST.get("description")
                 selected_item.short_description = request.POST.get("short_description")
@@ -324,9 +456,19 @@ def edit_item_view(request):
                 selected_item.acq_from = request.POST.get("acq_from")
 
                 selected_item.save()
-                return redirect('subnautica:vehicle_view', vehicle_name=selected_item.name)
-    image_path = selected_item.get_img_path() if selected_item else None
 
+                # Send info message
+                messages.info(request, f"Vehicle {selected_item.name} has been successfully edited")
+
+                # Redirect to edited page
+                return redirect('subnautica:vehicle_view', vehicle_name=selected_item.name)
+            else:
+                return render(request, 'subnautica/edit_item.html', {'error': "Model not found"})
+        else:
+            return render(request, 'subnautica/edit_item.html', {'error': "Item not found"})
+
+    # Image path is separate from an item's model
+    image_path = selected_item.get_img_path() if selected_item else None
 
     return render(request, 'subnautica/edit_item.html', {
         "model": model,
@@ -380,27 +522,43 @@ def get_item_list(model):
     else:
         return []
 
+# View to handling deleting an item
 def del_item_view(request):
+    # Get model
     model = request.GET.get("select_model")
+
+    # Let biomes be the default model shown
+    if not model:
+        model = request.GET.get("select_model", "biomes")
+
+    # Get info for chosen item to display
     item_id = request.GET.get("item_id")
-
     item_list = get_item_list(model)
-
     selected_item = get_selected_item(model, item_id)
 
     if request.method == "POST":
+        # Get info again because it may have changed
         item_id = request.POST.get("item_id")
         model = request.POST.get("select_model")
         item = get_selected_item(model, item_id)
         if item:
+            # Delete item
             item.delete()
+
+            # Send warning message
+            messages.warning(request, f"Item {item.name} has been successfully deleted")
+
+            # Redirect to list page for deleted item
             return redirect(f'subnautica:{model}_view')
+        else:
+            return render(request, 'subnautica/del_item.html', {'error': "Item not found"})
     return render(request, 'subnautica/del_item.html', {
         "model": model,
         "item_list": item_list,
         "selected_item": selected_item,
     })
 
+# Used in adding an item to dynamically display data for an item
 def get_dropdown_data_view(request):
     model_type = request.GET.get("model")
     data = []

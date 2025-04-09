@@ -8,6 +8,15 @@
 {% endblock %}
 
 {% block main_wrapper %}
+    {% if messages %}
+        <div class="message_wrapper">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="info_main_wrapper">
         <section class="ex_info_section">
             <h2 class="ex_title">{{ resource.resource }}</h2>
