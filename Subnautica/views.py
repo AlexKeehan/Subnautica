@@ -4,14 +4,6 @@ from django.contrib import messages
 from .forms import *
 from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, user, admin_user
 
-# Get all items from models for use in url parameters
-resources_list = Resources.objects.all()
-tools_list = Tools.objects.all()
-vehicles_list = Vehicles.objects.all()
-faunas_list = Faunas.objects.all()
-floras_list = Floras.objects.all()
-eggs_list = Eggs.objects.all()
-
 # Base view
 def subnautica_view(request):
     return render(request, 'subnautica/index.html')
@@ -43,6 +35,16 @@ def biome_view(request, biome_name):
     return render(request, f'subnautica/biome_item.html', {'biome': biome})
 
 def tools_view(request):
+    sort_by = request.GET.get('sort_by', None)
+    order = request.GET.get('order', 'asc')
+
+    if sort_by == "alphabet":
+        if order == "asc":
+            tools_list = Tools.objects.all().order_by('name')
+        else:
+            tools_list = Tools.objects.all().order_by('-name')
+    else:
+        tools_list = Tools.objects.all()
     return render(request, 'subnautica/tools.html', {"tools_list": tools_list})
 
 def tool_view(request, tool_name):
@@ -54,6 +56,16 @@ def tool_view(request, tool_name):
     return render(request, f'subnautica/tool_item.html', {'tool': tool})
 
 def vehicles_view(request):
+    sort_by = request.GET.get('sort_by', None)
+    order = request.GET.get('order', 'asc')
+
+    if sort_by == "alphabet":
+        if order == "asc":
+            vehicles_list = Vehicles.objects.all().order_by('name')
+        else:
+            vehicles_list = Vehicles.objects.all().order_by('-name')
+    else:
+        vehicles_list = Vehicles.objects.all()
     return render(request, 'subnautica/vehicles.html', {"vehicles_list": vehicles_list})
 
 def vehicle_view(request, vehicle_name):
@@ -65,6 +77,21 @@ def vehicle_view(request, vehicle_name):
     return render(request, f'subnautica/vehicle_item.html', {'vehicle': vehicle})
 
 def resources_view(request):
+    sort_by = request.GET.get('sort_by', None)
+    order = request.GET.get('order', 'asc')
+
+    if sort_by == "alphabet":
+        if order == "asc":
+            resources_list = Resources.objects.all().order_by('name')
+        else:
+            resources_list = Resources.objects.all().order_by('-name')
+    elif sort_by == "count":
+        if order == "asc":
+            resources_list = Resources.objects.all().annotate(num_items=models.Count("biomes")).order_by('num_items')
+        else:
+            resources_list = Resources.objects.all().annotate(num_items=models.Count("biomes")).order_by('-num_items')
+    else:
+        resources_list = Resources.objects.all()
     return render(request, 'subnautica/resources.html', {"resources_list": resources_list})
 
 def resource_view(request, resource_name):
@@ -76,6 +103,21 @@ def resource_view(request, resource_name):
     return render(request, f'subnautica/resource_item.html', {'resource': resource})
 
 def floras_view(request):
+    sort_by = request.GET.get('sort_by', None)
+    order = request.GET.get('order', 'asc')
+
+    if sort_by == "alphabet":
+        if order == "asc":
+            floras_list = Floras.objects.all().order_by('name')
+        else:
+            floras_list = Floras.objects.all().order_by('-name')
+    elif sort_by == "count":
+        if order == "asc":
+            floras_list = Floras.objects.all().annotate(num_items=models.Count("biomes")).order_by('num_items')
+        else:
+            floras_list = Floras.objects.all().annotate(num_items=models.Count("biomes")).order_by('-num_items')
+    else:
+        floras_list = Floras.objects.all()
     return render(request, 'subnautica/floras.html', {"floras_list": floras_list})
 
 def flora_view(request, flora_name):
@@ -87,6 +129,21 @@ def flora_view(request, flora_name):
     return render(request, f'subnautica/flora_item.html', {'flora': flora})
 
 def faunas_view(request):
+    sort_by = request.GET.get('sort_by', None)
+    order = request.GET.get('order', 'asc')
+
+    if sort_by == "alphabet":
+        if order == "asc":
+            faunas_list = Faunas.objects.all().order_by('name')
+        else:
+            faunas_list = Faunas.objects.all().order_by('-name')
+    elif sort_by == "count":
+        if order == "asc":
+            faunas_list = Faunas.objects.all().annotate(num_items=models.Count("biomes")).order_by('num_items')
+        else:
+            faunas_list = Faunas.objects.all().annotate(num_items=models.Count("biomes")).order_by('-num_items')
+    else:
+        faunas_list = Faunas.objects.all()
     return render(request, 'subnautica/faunas.html', {"faunas_list": faunas_list})
 
 def fauna_view(request, fauna_name):
@@ -98,6 +155,21 @@ def fauna_view(request, fauna_name):
     return render(request, f'subnautica/fauna_item.html', {'fauna': fauna})
 
 def eggs_view(request):
+    sort_by = request.GET.get('sort_by', None)
+    order = request.GET.get('order', 'asc')
+
+    if sort_by == "alphabet":
+        if order == "asc":
+            eggs_list = Eggs.objects.all().order_by('name')
+        else:
+            eggs_list = Eggs.objects.all().order_by('-name')
+    elif sort_by == "count":
+        if order == "asc":
+            eggs_list = Eggs.objects.all().annotate(num_items=models.Count("biomes")).order_by('num_items')
+        else:
+            eggs_list = Eggs.objects.all().annotate(num_items=models.Count("biomes")).order_by('-num_items')
+    else:
+        eggs_list = Eggs.objects.all()
     return render(request, 'subnautica/eggs.html', {"eggs_list": eggs_list})
 
 def search_view(request):

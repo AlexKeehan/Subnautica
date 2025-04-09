@@ -38,7 +38,11 @@
         <section class="item_list">
             <!-------------------------------------------->
             <div class="list_header">
-                <p>Vehicle</p>
+                <p class="sort_wrapper">Vehicle
+                    <a href="{% url 'subnautica:vehicles_view' %}?sort_by=alphabet&order={% if request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="alphabet_sort">
+                        <img src="{% static 'img/alphabetical_sort.jpg' %}" alt="Sort Alphabetically" class="sort_icon"/>
+                    </a>
+                </p>
                 <p>Description</p>
                 <p>Velocity</p>
             </div>

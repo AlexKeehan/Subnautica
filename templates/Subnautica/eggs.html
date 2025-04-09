@@ -43,10 +43,18 @@
         <section class="item_list">
             <!-------------------------------------------->
             <div class="list_header">
-                <p>Egg</p>
+                <p class="sort_wrapper">Egg
+                    <a href="{% url 'subnautica:eggs_view' %}?sort_by=alphabet&order={% if request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="alphabet_sort">
+                        <img src="{% static 'img/alphabetical_sort.jpg' %}" alt="Sort Alphabetically" class="sort_icon"/>
+                    </a>
+                </p>
                 <p>Description</p>
                 <p>Attitude</p>
-                <p>Location</p>
+                <p class="sort_wrapper">Location
+                    <a href="{% url 'subnautica:eggs_view' %}?sort_by=count&order={% if request.GET.order == 'desc' %}asc{% else %}desc{% endif %}" class="count_sort">
+                        <img src="{% static 'img/count_sort.jpg' %}" alt="Sort by Locations" class="sort_icon"/>
+                    </a>
+                </p>
             </div>
 
             <!-------------------------------------------->
