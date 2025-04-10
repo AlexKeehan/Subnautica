@@ -3,6 +3,8 @@ document.getElementById("select_model").addEventListener("change", function() {
     const extraFieldsCont = document.getElementById("extra_fields");
     extraFieldsCont.innerHTML = '';
 
+
+    // Define models fields, so the js knows what to dynamically display
     const modelFields = {
         biomes: [
             { label: "Biome Name", name: "name", placeholder: "Enter Biome Name" },
@@ -61,6 +63,7 @@ document.getElementById("select_model").addEventListener("change", function() {
         ]
     };
 
+    // Get data from url for model
     const url = `${getDropDownData}?model=${model}`;
 
     fetch(url, {
@@ -73,6 +76,7 @@ document.getElementById("select_model").addEventListener("change", function() {
     .then(data => {
         const fields = modelFields[model];
         if (fields) {
+            // Add fields
             fields.forEach(field => {
                 const div = document.createElement('div');
                 div.classList.add('input_info');
@@ -82,6 +86,7 @@ document.getElementById("select_model").addEventListener("change", function() {
                 label.textContent = field.label;
 
                 let input;
+                // Dropdown menu
                 if (field.isSelectMultiple) {
                     input = document.createElement('select');
                     input.setAttribute('id', field.name);
@@ -89,6 +94,7 @@ document.getElementById("select_model").addEventListener("change", function() {
                     input.setAttribute('multiple', 'multiple');
                     input.classList.add('dropdown');
 
+                    // Handle fauna separate, since it's a single select menu
                     if (field.name === "fauna" && data.faunas) {
                         input = document.createElement('select');
                         input.setAttribute('id', field.name);
@@ -124,7 +130,6 @@ document.getElementById("select_model").addEventListener("change", function() {
                     input.setAttribute('name', field.name);
                     input.setAttribute('placeholder', field.placeholder);
                 }
-
                 div.appendChild(label);
                 div.appendChild(input);
                 extraFieldsCont.appendChild(div);
@@ -134,6 +139,7 @@ document.getElementById("select_model").addEventListener("change", function() {
     .catch(error => console.error("Error Getting Data", error));
 });
 
+// Function to get data for dropdown menus
 function populateDropdown(selectElement, dataArray, dataType) {
     selectElement.innerHTML = '';
 
@@ -146,6 +152,7 @@ function populateDropdown(selectElement, dataArray, dataType) {
     });
 }
 
+// Function to only show submit button after a model is selected
 function showSubmitButton() {
     var selModel = document.getElementById("select_model").valueOf()
 

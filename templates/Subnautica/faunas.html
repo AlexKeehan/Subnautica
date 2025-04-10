@@ -37,6 +37,11 @@
     <div class="list_main_wrapper">
         <section class="list_title_wrapper">
             <h4 class="list_title">Faunas</h4>
+            {% if request.session.role == 'admin' %}
+                    <a href="{% url "Subnautica:add_item_view" %}" class="add_item_button">
+                        <img src="{% static "img/add_icon.jpg" %}" alt="Add Item" class="add_icon"/>
+                    </a>
+                {% endif %}
         </section>
 
         <section class="item_list">

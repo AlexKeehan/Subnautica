@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 
+# Make forms for all models for easier data handling
 class BiomesForm(forms.ModelForm):
     resources = forms.ModelMultipleChoiceField(
         queryset=Resources.objects.all(),

@@ -19,7 +19,16 @@
     {% endif %}
     <div class="info_main_wrapper">
         <section class="ex_info_section">
-            <h2 class="ex_title">{{ resource.resource }}</h2>
+            <h2 class="ex_title">{{ resource.name }}
+                {% if request.session.role == 'admin' %}
+                    <a href="{% url "Subnautica:edit_item_view" %}">
+                        <img src="{% static "img/edit_icon.jpg" %}" alt="Edit Item" class="edit_icon"/>
+                    </a>
+                    <a href="{% url "Subnautica:del_item_view" %}">
+                        <img src="{% static "img/del_icon.jpg" %}" alt="Delete Item" class="del_icon"/>
+                    </a>
+                {% endif %}
+            </h2>
             <p class="ex_info">
                 {{ resource.description|safe }}
             </p>

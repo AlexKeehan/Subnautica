@@ -10,6 +10,7 @@ function confirmDelete() {
     document.getElementById("edit_item_form").submit();
 }
 
+// Function to only show submit button after an item has been selected
 function showSubmitButton() {
     var selItem = document.getElementById("item_element").value;
 

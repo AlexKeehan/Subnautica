@@ -308,7 +308,7 @@ footer {
     overflow: hidden;
 }
 
-.sort_icon {
+.sort_icon, .add_icon, .edit_icon, .del_icon {
     width: 1em;
     height: 1em;
 }

@@ -38,6 +38,8 @@ function imageDisplay() {
     });
 }
 
+// Separate logic for checkmark
+// Not finished yet
 function checkmarkLogic(selElement) {
     const selectedOptions = Array.from(selElement.selectedOptions);
     selectedOptions.forEach(option => {
@@ -52,16 +54,18 @@ function checkmarkLogic(selElement) {
     });
 }
 
+// Have listeners for all the html fields to see when the user chooses an item
 function mulListeners() {
-        const multipleSelects = document.querySelectorAll('select[multiple]');
-        multipleSelects.forEach(selElement => {
-            selElement.addEventListener('change', function() {
-                checkmarkLogic(selElement);
-            });
+    const multipleSelects = document.querySelectorAll('select[multiple]');
+    multipleSelects.forEach(selElement => {
+        selElement.addEventListener('change', function() {
             checkmarkLogic(selElement);
         });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        mulListeners();
+        checkmarkLogic(selElement);
     });
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    mulListeners();
+});
