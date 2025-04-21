@@ -1,4 +1,5 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -189,15 +190,13 @@ def login_view(request):
     if request.method == "POST":
         # Get credentials
         username = request.POST.get("username")
-        pw = request.POST.get("password")
+        password = request.POST.get("password")
 
-        try:
-            user = Users.objects.get(username=username)
-        except Users.DoesNotExist:
-            return render(request, 'subnautica/login.html', {'error': 'Username not found'})
 
-        if user.check_password(pw):
+        user = authenticate(request, username=username, password=password)
 
+        if user is not None:
+            login(request, user)
             request.session["username"] = user.username
             if user.is_staff:
                 request.session["role"] = "admin"
@@ -220,6 +219,7 @@ def admin_user_view(request):
 def logout_view(request):
     del request.session["username"]
     del request.session["role"]
+    request.session.flush()
     return redirect('subnautica:subnautica_view')
 
 def signup_view(request):
@@ -278,6 +278,32 @@ def update_user_role_view(request, user_id):
         return redirect('subnautica:manage_users_view')
     else:
         return redirect('subnautica:manage_users_view')
+
+def profile_view(request, username):
+    try:
+        user = Users.objects.get(username=username)
+    except Users.DoesNotExist:
+        return redirect('subnautica:subnautica_view')
+
+    # Stop normal users from looking at other users profiles
+    # Unless it's an admin
+    if request.session["username"] != user.username and not request.session["role"] == "admin":
+        return redirect('subnautica:profile_view', username=request.user.username)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+
+            logout_view(request)
+            return redirect('subnautica:login_view')
+        else:
+            messages.warning(request, "Profile update failed")
+            return redirect('subnautica:profile_view', username=user.username)
+    else:
+        form = ProfileForm(instance=user)
+
+    return render(request, 'subnautica/profile.html', {'form': form, 'user': user})
 
 # View that handles adding new item logic
 def add_item_view(request):

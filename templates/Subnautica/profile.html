@@ -1,0 +1,64 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+{% endblock %}
+
+{% block main_wrapper %}
+<div class="main_wrapper">
+        <h2>{{ user.username }}'s Profile</h2>
+
+        {% if messages %}
+        <div class="message_wrapper">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+        <form class="profile_form" method="POST">
+            {% csrf_token %}
+
+            <div class="textbox">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" value="{{ form.username.value }}" readonly>
+            </div>
+
+            <div class="textbox">
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" id="first_name" value="{{ form.first_name.value }}" required>
+            </div>
+
+            <div class="textbox">
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name" id="last_name" value="{{ form.last_name.value }}" required>
+            </div>
+
+            <div class="textbox">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" value="{{ form.email.value }}" required>
+            </div>
+
+            <div class="textbox">
+                <label for="new_password">Password</label>
+                <input type="password" name="new_password" id="new_password" placeholder="Enter new password" value="{{ form.new_password.value }}">
+            </div>
+
+            <div class="textbox">
+                <label for="played_game">Have you played Subnautica before?</label>
+                <select name="played_game" id="played_game">
+                    <option value="True" {% if form.played_game.value == 'True' %}selected{% endif %}>Yes</option>
+                    <option value="False" {% if form.played_game.value == 'False' %}selected{% endif %}>No</option>
+                </select>
+            </div>
+
+            <div class="submit_button">
+                <button type="submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

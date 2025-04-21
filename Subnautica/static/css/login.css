@@ -75,3 +75,10 @@ select, button {
     background-color: white;
     cursor: pointer;
 }
+
+.profile_form {
+    color: white;
+    font-weight: bold;
+    padding: 1.3em;
+    display: block;
+}

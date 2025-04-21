@@ -56,14 +56,18 @@
         <div class="header_right">
             <ul>
                 {% if request.session.username %}
-                    <li><a class="signup">{{ request.session.username }}</a></li>
+                    <li class="user_info"><a class="signup">{{ request.session.username }}</a>
+                        <a href="{% url 'Subnautica:profile_view' username=request.session.username %}" class="profile_icon">
+                            <img src="{% static 'img/profile_pic.jpg' %}" alt="Profile Icon" class="profile_icon_img" />
+                        </a>
+                    </li>
                     <li><a href="{% url "Subnautica:logout_view" %}" class="login">Log out</a></li>
                 {% else %}
                     <li><a href="{% url "Subnautica:login_view" %}" class="login">Login</a></li>
                     <li><a href="{% url "Subnautica:signup_view" %}" class="signup">Signup</a></li>
                 {% endif %}
             </ul>
-        </div>
+
     </header>
 
     <!-- Main wrapper for main content-->

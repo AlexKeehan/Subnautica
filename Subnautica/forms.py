@@ -1,11 +1,12 @@
 from django import forms
+from django.contrib.auth.forms import UserChangeForm
 from .models import *
 
 # Make forms for all models for easier data handling
 class BiomesForm(forms.ModelForm):
     resources = forms.ModelMultipleChoiceField(
         queryset=Resources.objects.all(),
-        widget=forms.SelectMultiple(attrs={'class': 'dropdown'}),
+        widget=forms.SelectMultiple(attrs={"class": "dropdown"}),
         required=False
     )
     class Meta:
@@ -15,7 +16,7 @@ class BiomesForm(forms.ModelForm):
 class ResourcesForm(forms.ModelForm):
     biomes = forms.ModelMultipleChoiceField(
         queryset=Biomes.objects.all(),
-        widget=forms.SelectMultiple(attrs={'class': 'dropdown'}),
+        widget=forms.SelectMultiple(attrs={"class": "dropdown"}),
         required=False
     )
     class Meta:
@@ -25,12 +26,12 @@ class ResourcesForm(forms.ModelForm):
 class EggsForm(forms.ModelForm):
     fauna = forms.ModelChoiceField(
         queryset=Faunas.objects.all(),
-        widget=forms.Select(attrs={'class': 'dropdown'}),
+        widget=forms.Select(attrs={"class": "dropdown"}),
         required=False
     )
     biomes = forms.ModelMultipleChoiceField(
         queryset=Biomes.objects.all(),
-        widget=forms.SelectMultiple(attrs={'class': 'dropdown'}),
+        widget=forms.SelectMultiple(attrs={"class": "dropdown"}),
         required=False
     )
     class Meta:
@@ -40,7 +41,7 @@ class EggsForm(forms.ModelForm):
 class FaunasForm(forms.ModelForm):
     biomes = forms.ModelMultipleChoiceField(
         queryset=Biomes.objects.all(),
-        widget=forms.SelectMultiple(attrs={'class': 'dropdown'}),
+        widget=forms.SelectMultiple(attrs={"class": "dropdown"}),
         required=False
     )
     class Meta:
@@ -50,7 +51,7 @@ class FaunasForm(forms.ModelForm):
 class FlorasForm(forms.ModelForm):
     biomes = forms.ModelMultipleChoiceField(
         queryset=Biomes.objects.all(),
-        widget=forms.SelectMultiple(attrs={'class': 'dropdown'}),
+        widget=forms.SelectMultiple(attrs={"class": "dropdown"}),
         required=False
     )
     class Meta:
@@ -66,3 +67,26 @@ class VehiclesForm(forms.ModelForm):
     class Meta:
         model = Vehicles
         fields = ["name", "description", "short_description", "velocity", "health", "acq_from"]
+
+class ProfileForm(UserChangeForm):
+    class Meta:
+        model = Users
+        fields = ["username", "first_name", "last_name", "email", "played_game"]
+        widgets = {
+            "played_game": forms.Select(choices=[(True, "Yes"), (False, "No")]),
+        }
+
+    new_password = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput(attrs={"placeholder": "Leave blank to keep same password"}),
+        label="New password"
+    )
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get("new_password")
+        if password:
+            user.set_password(password)
+        if commit:
+            user.save()
+        return user

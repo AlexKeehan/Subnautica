@@ -128,6 +128,18 @@ nav ul li a {
     align-items: center;
 }
 
+.profile_icon {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.profile_icon_img {
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .header_right {
     position: absolute;
     right: .2em;
@@ -136,20 +148,24 @@ nav ul li a {
 
 .header_right li {
     list-style-type: none;
-    padding-bottom: .4em;
+    padding-bottom: .8em;
+    padding-right: 1.2em
+}
+
+.header_right .user_info {
+    display: flex;
 }
 
 .login, .signup {
     font-size: 1.2em;
     color: white;
     text-decoration: none;
-    box-shadow: 0 .2em .4em rgba(0, 0, 0, 0.2);
     border-radius: 5px;
 }
 
 .login {
     background-color: rgba(51, 117, 56, 0.8);
-    padding: .3em;
+    padding: .1em;
 }
 
 .signup {
