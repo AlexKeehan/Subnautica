@@ -251,6 +251,34 @@ def signup_view(request):
     else:
         return render(request, 'subnautica/signup.html')
 
+def manage_users_view(request):
+    if not request.session["role"] == "admin":
+        return redirect('subnautica:user_index_view')
+    users = Users.objects.all()
+    return render(request, 'subnautica/manage_users.html', {'users': users})
+
+def update_user_role_view(request, user_id):
+    if request.method == "POST":
+        if not request.session["role"] == "admin":
+            return redirect('subnautica:user_index_view')
+
+        try:
+            user = Users.objects.get(id=user_id)
+        except Users.DoesNotExist:
+            return redirect('subnautica:manage_users_view')
+
+        new_role = request.POST.get("new_role")
+        if new_role == "admin":
+            user.is_staff = True
+        else:
+            user.is_staff = False
+
+        user.save()
+
+        return redirect('subnautica:manage_users_view')
+    else:
+        return redirect('subnautica:manage_users_view')
+
 # View that handles adding new item logic
 def add_item_view(request):
     # If form is submitted

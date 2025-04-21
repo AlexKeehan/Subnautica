@@ -7,7 +7,6 @@
 {% endblock %}
 {% block main_wrapper %}
     <div class="main_wrapper">
-        <!--Option to return to logged-in user index. This section will be reworked for better navigation-->
         <div class="return_button_wrapper">
             <a href="{% url "Subnautica:user_index_view" %}" class="return_button">Return to Logged-in User index</a>
         </div>
@@ -22,6 +21,7 @@
                             <li><a href="{% url "Subnautica:add_item_view" %}">Add New Item</a></li>
                             <li><a href="{% url "Subnautica:edit_item_view" %}">Edit Item</a></li>
                             <li><a href="{% url "Subnautica:del_item_view" %}">Delete Item</a></li>
+                            <li><a href="{% url "Subnautica:manage_users_view" %}">Manage Users</a></li>
                         </ul>
                     </li>
                 </ul>

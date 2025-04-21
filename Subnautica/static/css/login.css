@@ -50,3 +50,28 @@
     color: white;
     padding-top: .8em;
 }
+
+.table {
+    color: white;
+}
+
+th {
+    background-color: lightgray;
+    text-align: left;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+td {
+    color: white;
+    padding: .6em;
+    text-align: left;
+    font-size: 1em;
+    border-top: 1px solid black;
+}
+
+select, button {
+    padding: .4em;
+    background-color: white;
+    cursor: pointer;
+}

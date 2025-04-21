@@ -1,0 +1,56 @@
+<!-- user_list.html -->
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{% static "css/main.css" %}" />
+    <link rel="stylesheet" href="{% static "css/login.css" %}" />
+{% endblock %}
+
+{% block main_wrapper %}
+    <div class="main_wrapper">
+        <h2>User Management</h2>
+
+        <!-- Display user list -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Played Game</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.played_game }}</td>
+                        <td>
+                            {% if user.is_staff %}
+                                Admin
+                            {% else %}
+                                User
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{% url 'subnautica:update_user_role_view' user.id %}">
+                                {% csrf_token %}
+                                <select name="new_role">
+                                    <option value="user" {% if not user.is_staff %}selected{% endif %}>User</option>
+                                    <option value="admin" {% if user.is_staff %}selected{% endif %}>Admin</option>
+                                </select>
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
