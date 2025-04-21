@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from .models import *
+from .models.replies import Reply
+
 
 # Make forms for all models for easier data handling
 class BiomesForm(forms.ModelForm):
@@ -90,3 +92,19 @@ class ProfileForm(UserChangeForm):
         if commit:
             user.save()
         return user
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["content"]
+        widgets = {
+            "content": forms.Textarea(attrs={"placeholder": "Leave a comment...", "rows": 3, "cols": 60}),
+        }
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = ["content"]
+        widgets = {
+            "content": forms.Textarea(attrs={"placeholder": "Write reply here", "required": True}),
+        }

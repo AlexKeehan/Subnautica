@@ -68,7 +68,7 @@
     margin-bottom: .5em;
 }
 
-.user_info {
+.comment_user_info {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -119,6 +119,14 @@
     margin-top: 2em;
 }
 
+.reply_form_wrapper {
+    display: none;
+}
+
 .comment_wrapper .comment {
     margin-bottom: .5em;
+}
+
+.edit_comment_form_wrapper {
+    display: none;
 }

@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import *
 from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, Users
@@ -154,7 +154,24 @@ def fauna_view(request, fauna_name):
     except Faunas.DoesNotExist:
         return render(request, 'subnautica/faunas.html', {'error': 'Fauna not found'})
 
-    return render(request, f'subnautica/fauna_item.html', {'fauna': fauna})
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = request.user
+            content_type = ContentType.objects.get_for_model(fauna)
+            comment.content_type = content_type
+            comment.object_id = fauna.id
+            comment.save()
+            messages.success(request, 'Comment submitted successfully')
+            return redirect('subnautica:fauna_view', fauna_name=fauna.name)
+    else:
+        comment_form = CommentForm()
+
+    # Get all comments for this fauna
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(fauna), object_id=fauna.id)
+
+    return render(request, f'subnautica/fauna_item.html', {'fauna': fauna, 'comments': comments, 'form': comment_form})
 
 def eggs_view(request):
     sort_by = request.GET.get('sort_by', None)
@@ -184,6 +201,42 @@ def search_view(request):
         filtered_items = Biomes.objects.all()
 
     return render(request, 'subnautica/search_results.html', {'query': query, 'biomes': filtered_items})
+
+def add_reply_view(request, comment_id):
+
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if request.method == "POST":
+        print("form data", request.POST)
+
+        form = ReplyForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.user = request.user
+            reply.comment = comment
+            reply.save()
+
+            reply_data = {
+                "user": reply.user.username,
+                "content": reply.content,
+                "created_at": reply.created_at.strftime("%b %d, %Y"),
+            }
+            return JsonResponse(reply_data)
+        else:
+            print("form errors", form.errors)
+            return JsonResponse({'error': "Error during process"}, status=404)
+    else:
+        form = ReplyForm()
+
+def edit_comment_view(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+
+    if comment.user == request.user or request.user.is_staff:
+        if request.method == "POST":
+            comment.content = request.POST["content"]
+            comment.save()
+        return redirect('subnautica:fauna_view', fauna_id=comment.content_type.id)
+    return redirect('subnautica:fauna_view', fauna_id=comment.content_type.id)
 
 def login_view(request):
     # If form is submitted
