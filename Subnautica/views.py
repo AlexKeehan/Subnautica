@@ -1,8 +1,9 @@
+from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import *
-from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, user, admin_user
+from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, Users
 
 # Base view
 def subnautica_view(request):
@@ -190,20 +191,22 @@ def login_view(request):
         username = request.POST.get("username")
         pw = request.POST.get("password")
 
-        # Check hardcoded values for correct login
-        # Normal user login
-        if username == user["username"] and pw == user["password"]:
-            request.session["username"] = username
-            request.session["role"] = "user"
-            return redirect("subnautica:user_index_view")
-        # Admin login
-        elif username == admin_user["username"] and pw == admin_user["password"]:
-            request.session["username"] = username
-            request.session["role"] = "admin"
-            return redirect("subnautica:admin_user_view")
-        # Failed login
-        else:
-            return render(request, 'subnautica/login.html', {"error_msg": "Invalid username or password"})
+        try:
+            user = Users.objects.get(username=username)
+        except Users.DoesNotExist:
+            return render(request, 'subnautica/login.html', {'error': 'Username not found'})
+
+        if user.check_password(pw):
+
+            request.session["username"] = user.username
+            if user.is_staff:
+                request.session["role"] = "admin"
+                return redirect('subnautica:admin_user_view')
+            else:
+                request.session["role"] = "user"
+                return redirect('subnautica:user_index_view')
+
+        return render(request,"subnautica/login.html", {'error_msg': 'Password not found'})
     # Form is not submitted, so just show login page
     else:
         return render(request, 'subnautica/login.html')
@@ -220,7 +223,33 @@ def logout_view(request):
     return redirect('subnautica:subnautica_view')
 
 def signup_view(request):
-    return render(request, 'subnautica/signup.html')
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        email = request.POST.get("email")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        played_game = request.POST.get("played_game") == 'on'
+        is_staff = request.POST.get("is_staff") == 'on'
+
+        user = Users.objects.create_user(username=username,
+                                         email=email,
+                                         password=password,
+                                         first_name=first_name,
+                                         last_name=last_name,
+                                         played_game=played_game,
+                                         is_staff=is_staff)
+
+        request.session["username"] = user.username
+        if user.is_staff:
+            request.session["role"] = "admin"
+            return redirect('subnautica:admin_user_view')
+        else:
+            request.session["role"] = "user"
+            return redirect('subnautica:user_index_view')
+    else:
+        return render(request, 'subnautica/signup.html')
 
 # View that handles adding new item logic
 def add_item_view(request):

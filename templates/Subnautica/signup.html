@@ -1,0 +1,62 @@
+{% extends "Subnautica/index.html" %}
+{% load static %}
+
+{% block css_styling %}
+    <link rel="stylesheet" href="{%  static "css/main.css" %}" />
+    <link rel="stylesheet" href="{%  static "css/login.css" %}" />
+{% endblock %}
+
+{%  block main_wrapper %}
+    <!--Section to display signup information-->
+    <div class="login_wrapper">
+        <div class="login_layout">
+            <h2>Register User</h2>
+            <!--Use JavaScript to redirect or display error message depending on signup -->
+            <form id="login_form" method="POST">
+                {% csrf_token %}
+                <div class="textbox">
+                    <label for="reg_username">Username</label>
+                    <input type="text" placeholder="Enter Username" name="username" id="username" required>
+                </div>
+
+                <div class="textbox">
+                    <label for="reg_password">Password</label>
+                    <input type="password" placeholder="Enter Password" name="password" id="password" required>
+                </div>
+
+                <div class="textbox">
+                    <label for="reg_email">Email</label>
+                    <input type="email" placeholder="Enter Email" name="email" id="email" required>
+                </div>
+
+                <div class="textbox">
+                    <label for="reg_first_name">First Name</label>
+                    <input type="text" placeholder="Enter First Name" name="first_name" id="first_name">
+                </div>
+
+                <div class="textbox">
+                    <label for="reg_last_name">Last Name</label>
+                    <input type="text" placeholder="Enter Last Name" name="last_name" id="last_name">
+                </div>
+
+                <div class="textbox">
+                    <label for="reg_played_game">Have You Played Subnautica Before?</label>
+                    <input type="checkbox" name="reg_played_game" id="played_game">
+                </div>
+
+                <div class="textbox">
+                    <label for="is_staff">Is Admin</label>
+                    <input type="checkbox" name="is_staff" id="is_staff">
+                </div>
+
+                <div class="submit_button">
+                    <button type="submit">Submit</button>
+                </div>
+                <!--If there is an error message, then it will show up here-->
+                {% if error_msg %}
+                    <p id="error_msg" class="error_msg">{{ error_msg }}</p>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

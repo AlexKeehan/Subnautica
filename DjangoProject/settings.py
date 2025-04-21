@@ -111,6 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'Subnautica.Users'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
