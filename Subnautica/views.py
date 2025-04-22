@@ -202,13 +202,11 @@ def search_view(request):
 
     return render(request, 'subnautica/search_results.html', {'query': query, 'biomes': filtered_items})
 
-def add_reply_view(request, comment_id):
+def add_reply_view(request, model, item, comment_id):
 
     comment = get_object_or_404(Comment, id=comment_id)
 
     if request.method == "POST":
-        print("form data", request.POST)
-
         form = ReplyForm(request.POST)
         if form.is_valid():
             reply = form.save(commit=False)
@@ -228,15 +226,25 @@ def add_reply_view(request, comment_id):
     else:
         form = ReplyForm()
 
-def edit_comment_view(request, comment_id):
+def edit_comment_view(request, model, item, comment_id):
     comment = Comment.objects.get(id=comment_id)
 
     if comment.user == request.user or request.user.is_staff:
         if request.method == "POST":
-            comment.content = request.POST["content"]
-            comment.save()
-        return redirect('subnautica:fauna_view', fauna_id=comment.content_type.id)
-    return redirect('subnautica:fauna_view', fauna_id=comment.content_type.id)
+            new_content = request.POST["content"]
+
+            if new_content.strip():
+                comment.content = new_content
+                comment.created_at = timezone.now()
+                comment.save()
+                return JsonResponse({
+                    'id': comment.id,
+                    'content': comment.content,
+                    'created_at': comment.created_at.strftime("%b %d, %Y")
+                })
+        else:
+            return JsonResponse({'error': 'You do not have permission to edit this comment.'}, status=403)
+    return JsonResponse({'error': 'Invalid method.'}, status=404)
 
 def login_view(request):
     # If form is submitted

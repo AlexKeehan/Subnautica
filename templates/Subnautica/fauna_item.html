@@ -100,7 +100,7 @@
 
                         {% if comment.user == request.user or request.user.is_staff %}
                             <div class="edit_icon_wrapper">
-                                <img src="{% static "img/edit_icon.jpg" %}" alt="Edit Icon" class="edit_icon" onclick="editComment({{ comment.id }})"/>
+                                <img src="{% static "img/edit_icon.jpg" %}" alt="Edit Icon" class="edit_icon" data-comment-id="{{ comment.id }}"/>
                             </div>
                         {% endif %}
 
@@ -110,9 +110,10 @@
                     </div>
 
                     <div class="edit_comment_form_wrapper" id="edit_form_{{ comment.id }}">
-                        <form method="POST" action="{% url 'Subnautica:edit_comment_view' comment.id %}">
+                        <form method="POST" data-comment-id="{{ comment.id }}">
                             {% csrf_token %}
                             <textarea name="content" placeholder="Edit your comment..." required>{{ comment.content }}</textarea>
+                            <input type="hidden" name="content_id" value="{{ comment.id }}">
                             <button type="submit" class="submit_button">Update Comment</button>
                         </form>
                     </div>
@@ -127,7 +128,7 @@
 
                     <!--Replies-->
                     {% if comment.replies.all %}
-                        <div class="reply_wrapper">
+                        <div class="reply_wrapper" id="comment_{{ comment.id }}_reply_wrapper">
                             {% for reply in comment.replies.all %}
                                 <div class="reply">
                                     <div class="user_info">
@@ -154,4 +155,5 @@
 
 {% block js %}
     <script src="{%  static "js/comments.js" %}"></script>
+    <script src="{%  static "js/edit_comment.js" %}"></script>
 {% endblock %}

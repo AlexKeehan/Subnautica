@@ -1,6 +1,11 @@
 function displayReplyForm(comment_id) {
     var reply_form = document.getElementById("reply_form_" + comment_id);
 
+    if (!reply_form) {
+        console.log("No reply form found");
+        return;
+    }
+
     if (reply_form.style.display === "none" || reply_form.style.display === "") {
         reply_form.style.display = "block";
     }
@@ -45,7 +50,7 @@ function addReply(event, comment_id, reply_form) {
                 </div>
             `;
 
-            var reply_wrapper = document.querySelector("#comment_" + comment_id + "_reply_wrapper");
+            var reply_wrapper = document.querySelector(`#comment_${comment_id}_reply_wrapper`);
             if (!reply_wrapper) {
                 reply_wrapper = document.createElement("div");
                 reply_wrapper.classList.add("reply_wrapper");
@@ -54,7 +59,7 @@ function addReply(event, comment_id, reply_form) {
 
             reply_wrapper.innerHTML += reply_html;
 
-            reply_form.querySelector('textarea[name="reply_content"]').value = '';
+            reply_form.querySelector('textarea').value = '';
             console.log("DONE");
         }
         else {
@@ -63,11 +68,4 @@ function addReply(event, comment_id, reply_form) {
     };
 
     xhr.send(form_data);
-}
-
-function editComment(comment_id) {
-    const comment_text = document.getElementById(`comment_text_${comment_id}`);
-    const edit_form = document.getElementById(`edit_form_${comment_id}`);
-    comment_text.style.dissplay = "none";
-    edit_form.style.display = "block";
 }
