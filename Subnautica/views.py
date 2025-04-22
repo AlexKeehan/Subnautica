@@ -1,5 +1,4 @@
-from django.contrib.auth import authenticate, login, update_session_auth_hash
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -34,7 +33,20 @@ def biome_view(request, biome_name):
     except Biomes.DoesNotExist:
         return render(request, 'subnautica/biomes.html', {'error': 'Biome not found'})
 
-    return render(request, f'subnautica/biome_item.html', {'biome': biome})
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = get_comments(request, comment_form, biome)
+            comment.save()
+            messages.success(request, 'Comment submitted successfully')
+            return redirect('subnautica:biome_view', biome_name=biome.name)
+    else:
+        comment_form = CommentForm()
+
+    # Get all comments for this fauna
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(biome), object_id=biome.id)
+
+    return render(request, f'subnautica/biome_item.html', {'biome': biome, 'comments': comments, 'form': comment_form})
 
 def tools_view(request):
     sort_by = request.GET.get('sort_by', None)
@@ -55,7 +67,20 @@ def tool_view(request, tool_name):
     except Tools.DoesNotExist:
         return render(request, 'subnautica/tools.html', {'error': 'Tool not found'})
 
-    return render(request, f'subnautica/tool_item.html', {'tool': tool})
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = get_comments(request, comment_form, tool)
+            comment.save()
+            messages.success(request, 'Comment submitted successfully')
+            return redirect('subnautica:tool_view', tool_name=tool.name)
+    else:
+        comment_form = CommentForm()
+
+    # Get all comments for this fauna
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(tool), object_id=tool.id)
+
+    return render(request, f'subnautica/tool_item.html', {'tool': tool, 'comments': comments, 'form': comment_form})
 
 def vehicles_view(request):
     sort_by = request.GET.get('sort_by', None)
@@ -76,7 +101,20 @@ def vehicle_view(request, vehicle_name):
     except Vehicles.DoesNotExist:
         return render(request, 'subnautica/vehicles.html', {'error': 'Vehicle not found'})
 
-    return render(request, f'subnautica/vehicle_item.html', {'vehicle': vehicle})
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = get_comments(request, comment_form, vehicle)
+            comment.save()
+            messages.success(request, 'Comment submitted successfully')
+            return redirect('subnautica:vehicle_view', vehicle_name=vehicle.name)
+    else:
+        comment_form = CommentForm()
+
+    # Get all comments for this fauna
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(vehicle), object_id=vehicle.id)
+
+    return render(request, f'subnautica/vehicle_item.html', {'vehicle': vehicle, 'comments': comments, 'form': comment_form})
 
 def resources_view(request):
     sort_by = request.GET.get('sort_by', None)
@@ -102,7 +140,20 @@ def resource_view(request, resource_name):
     except Resources.DoesNotExist:
         return render(request, 'subnautica/resources.html', {'error': 'Resource not found'})
 
-    return render(request, f'subnautica/resource_item.html', {'resource': resource})
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = get_comments(request, comment_form, resource)
+            comment.save()
+            messages.success(request, 'Comment submitted successfully')
+            return redirect('subnautica:resource_view', resource_name=resource.name)
+    else:
+        comment_form = CommentForm()
+
+    # Get all comments for this fauna
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(resource), object_id=resource.id)
+
+    return render(request, f'subnautica/resource_item.html', {'resource': resource, 'comments': comments, 'form': comment_form})
 
 def floras_view(request):
     sort_by = request.GET.get('sort_by', None)
@@ -128,7 +179,20 @@ def flora_view(request, flora_name):
     except Floras.DoesNotExist:
         return render(request, 'subnautica/floras.html', {'error': 'Flora not found'})
 
-    return render(request, f'subnautica/flora_item.html', {'flora': flora})
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = get_comments(request, comment_form, flora)
+            comment.save()
+            messages.success(request, 'Comment submitted successfully')
+            return redirect('subnautica:flora_view', flora_name=flora.name)
+    else:
+        comment_form = CommentForm()
+
+    # Get all comments for this fauna
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(flora), object_id=flora.id)
+
+    return render(request, f'subnautica/flora_item.html', {'flora': flora, 'comments': comments, 'form': comment_form})
 
 def faunas_view(request):
     sort_by = request.GET.get('sort_by', None)
@@ -157,11 +221,7 @@ def fauna_view(request, fauna_name):
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.user = request.user
-            content_type = ContentType.objects.get_for_model(fauna)
-            comment.content_type = content_type
-            comment.object_id = fauna.id
+            comment = get_comments(request, comment_form, fauna)
             comment.save()
             messages.success(request, 'Comment submitted successfully')
             return redirect('subnautica:fauna_view', fauna_name=fauna.name)
@@ -190,6 +250,15 @@ def eggs_view(request):
     else:
         eggs_list = Eggs.objects.all()
     return render(request, 'subnautica/eggs.html', {"eggs_list": eggs_list})
+
+# Helper function to reduce duplicate code for getting comments for item pages
+def get_comments(request, comment_form, model):
+    comment = comment_form.save(commit=False)
+    comment.user = request.user
+    content_type = ContentType.objects.get_for_model(model)
+    comment.content_type = content_type
+    comment.object_id = model.id
+    return comment
 
 def search_view(request):
     query = request.GET.get('query', '')
@@ -253,11 +322,11 @@ def login_view(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-
+        # Use Django's built in authenticate
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request, user)
+            # Use session variables
             request.session["username"] = user.username
             if user.is_staff:
                 request.session["role"] = "admin"
@@ -284,8 +353,8 @@ def logout_view(request):
     return redirect('subnautica:subnautica_view')
 
 def signup_view(request):
-
     if request.method == "POST":
+        # Get info
         username = request.POST.get("username")
         password = request.POST.get("password")
         email = request.POST.get("email")
@@ -294,6 +363,7 @@ def signup_view(request):
         played_game = request.POST.get("played_game") == 'on'
         is_staff = request.POST.get("is_staff") == 'on'
 
+        # Create user
         user = Users.objects.create_user(username=username,
                                          email=email,
                                          password=password,
@@ -315,6 +385,7 @@ def signup_view(request):
 def manage_users_view(request):
     if not request.session["role"] == "admin":
         return redirect('subnautica:user_index_view')
+    # Get all users to display them
     users = Users.objects.all()
     return render(request, 'subnautica/manage_users.html', {'users': users})
 
@@ -323,17 +394,20 @@ def update_user_role_view(request, user_id):
         if not request.session["role"] == "admin":
             return redirect('subnautica:user_index_view')
 
+        # Get user
         try:
             user = Users.objects.get(id=user_id)
         except Users.DoesNotExist:
             return redirect('subnautica:manage_users_view')
 
+        # Get new role
         new_role = request.POST.get("new_role")
         if new_role == "admin":
             user.is_staff = True
         else:
             user.is_staff = False
 
+        # Save new role
         user.save()
 
         return redirect('subnautica:manage_users_view')
@@ -341,6 +415,7 @@ def update_user_role_view(request, user_id):
         return redirect('subnautica:manage_users_view')
 
 def profile_view(request, username):
+    # Get user
     try:
         user = Users.objects.get(username=username)
     except Users.DoesNotExist:
@@ -352,8 +427,10 @@ def profile_view(request, username):
         return redirect('subnautica:profile_view', username=request.user.username)
 
     if request.method == "POST":
+        # Get new user data
         form = ProfileForm(request.POST, instance=user)
         if form.is_valid():
+            # Save new data and then logout user to reenter credentials
             form.save()
 
             logout_view(request)
@@ -363,7 +440,6 @@ def profile_view(request, username):
             return redirect('subnautica:profile_view', username=user.username)
     else:
         form = ProfileForm(instance=user)
-
     return render(request, 'subnautica/profile.html', {'form': form, 'user': user})
 
 # View that handles adding new item logic

@@ -56,78 +56,97 @@
         </section>
     </div>
 
-    <!--Section for comments with nested replies-->
+        {% if request.user.is_authenticated %}
     <div class="comment_main_wrapper">
+        <h4 class="comment_title">Leave a Comment</h4>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="submit_button">Post Comment</button>
+            </form>
+    </div>
+    {% else %}
+        <div class="comment_main_wrapper">
+            <h2>You need to be logged in to leave a comment. <a href="{% url 'Subnautica:login_view' %}">Login here</a>.</h2>
+        </div>
+    {% endif %}
+
+    {% if comments %}
+    <div class="comment_main_wrapper">
+        <h2>Comments</h2>
         <section class="comment_title_wrapper">
-            <h4 class="comment_title">Comments</h4>
         </section>
-        <!--Comment-->
+
         <section class="comment_list">
-            <div class="comment_wrapper">
-                <div class="comment">
-                    <div class="user_info">
-                        <img src="{% static "img/profile_pic.jpg" %}" alt="profile picture" class="profile_pic" />
-                        <span class="username">Username</span>
-                    </div>
-
-                    <div class="comment_content">
-                        <p class="comment_text">Great early game biome to explore</p>
-                        <span class="comment_date">Posted on: Feb 18, 2025</span>
-                    </div>
-
-                    <div class="reply_icon_wrapper">
-                        <img src="{% static "img/reply_icon.jpg" %}" alt="reply icon" class="reply_icon" />
-                    </div>
-                </div>
-
-                <!--Replies-->
-
-                <div class="reply_wrapper">
-                    <div class="reply">
-                        <div class="user_info">
-                            <img src="{% static "img/reply_icon.jpg" %}" alt="profile picture" class="profile_pic" />
-                            <span class="username">Reply Username</span>
+            {% for comment in comments %}
+                <div class="comment_wrapper" id="comment_{{ comment.id }}">
+                    <div class="comment">
+                        <div class="comment_user_info">
+                            <img src="{% static "img/profile_pic.jpg" %}" alt="profile picture" class="profile_pic" />
+                            <span class="username">{{ comment.user.username }}</span>
                         </div>
 
                         <div class="comment_content">
-                            <p class="comment_text">I agree!</p>
-                            <span class="comment_date">Posted on: Feb 19, 2025</span>
+                            <p class="comment_text">{{ comment.content }}</p>
+                            <span class="comment_date">Posted on: {{ comment.created_at|date:"M d, Y"}}</span>
+                        </div>
+
+                        {% if comment.user == request.user or request.user.is_staff %}
+                            <div class="edit_icon_wrapper">
+                                <img src="{% static "img/edit_icon.jpg" %}" alt="Edit Icon" class="edit_icon" data-comment-id="{{ comment.id }}"/>
+                            </div>
+                        {% endif %}
+
+                        <div class="reply_icon_wrapper">
+                            <img src="{% static "img/reply_icon.jpg" %}" alt="reply icon" class="reply_icon" onclick="displayReplyForm({{ comment.id }})"/>
                         </div>
                     </div>
 
-                    <div class="reply_wrapper">
-                        <div class="reply">
-                            <div class="user_info">
-                                <img src="{% static "img/profile_pic.jpg" %}" alt="profile picture" class="profile_pic" />
-                                <span class="username">Reply Username</span>
-                            </div>
+                    <div class="edit_comment_form_wrapper" id="edit_form_{{ comment.id }}">
+                        <form method="POST" data-comment-id="{{ comment.id }}">
+                            {% csrf_token %}
+                            <textarea name="content" placeholder="Edit your comment..." required>{{ comment.content }}</textarea>
+                            <input type="hidden" name="content_id" value="{{ comment.id }}">
+                            <button type="submit" class="submit_button">Update Comment</button>
+                        </form>
+                    </div>
 
-                            <div class="comment_content">
-                                <p class="comment_text">I hate this biome!</p>
-                                <span class="comment_date">Posted on: Feb 19, 2025</span>
-                            </div>
+                    <div class="reply_form_wrapper" id="reply_form_{{ comment.id }}">
+                        <form method="POST" onsubmit="addReply(event, {{ comment.id }}, this)">
+                            {% csrf_token %}
+                            <textarea name="content" placeholder="Write reply..." required></textarea>
+                            <button type="submit" class="submit_button">Add Reply</button>
+                        </form>
+                    </div>
+
+                    <!--Replies-->
+                    {% if comment.replies.all %}
+                        <div class="reply_wrapper" id="comment_{{ comment.id }}_reply_wrapper">
+                            {% for reply in comment.replies.all %}
+                                <div class="reply">
+                                    <div class="user_info">
+                                        <img src="{% static "img/reply_icon.jpg" %}" alt="profile picture" class="profile_pic" />
+                                        <span class="username">{{ reply.user.username }}</span>
+                                    </div>
+
+                                    <div class="comment_content">
+                                        <p class="comment_text">{{ reply.content }}</p>
+                                        <span class="comment_date">Posted on: {{ reply.created_at|date:"M d, Y"}}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
-
-                <div class="comment">
-                    <div class="user_info">
-                        <img src="{% static "img/profile_pic.jpg" %}" alt="profile picture" class="profile_pic" />
-                        <span class="username">Username</span>
-                    </div>
-
-                    <div class="comment_content">
-                        <p class="comment_text">Had some great memories here when I first started playing. Love the environment, especially at night!</p>
-                        <span class="comment_date">Posted on: Feb 18, 2025</span>
-                    </div>
-
-                    <div class="reply_icon_wrapper">
-                        <img src="{% static "img/reply_icon.jpg" %}" alt="reply icon" class="reply_icon" />
-                    </div>
-                </div>
-
-
-            </div>
+            {% endfor %}
         </section>
     </div>
+    {% else %}
+        <p>No comments yet</p>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    <script src="{%  static "js/comments.js" %}"></script>
+    <script src="{%  static "js/edit_comment.js" %}"></script>
 {% endblock %}
