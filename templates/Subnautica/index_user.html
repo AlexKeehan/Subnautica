@@ -51,9 +51,9 @@
                     <li>
                         <a class="activity_title">Activity</a>
                         <ul class="activity_list">
-                            <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Username replied</a></li>
-                            <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Username replied</a></li>
-                            <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Username replied</a></li>
+                            {% for activity in activities %}
+                                <li><a href="{{ activity.url }}">{{ activity.get_activity_msg }}</a></li>
+                            {% endfor %}
                         </ul>
                     </li>
                 </ul>

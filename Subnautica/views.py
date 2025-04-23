@@ -2,8 +2,12 @@ from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.urls import reverse
+
 from .forms import *
 from .models import Biomes, Resources, Floras, Faunas, Eggs, Tools, Vehicles, Users
+from .models.activity import Activity
+
 
 # Base view
 def subnautica_view(request):
@@ -32,6 +36,8 @@ def biome_view(request, biome_name):
         biome = Biomes.objects.get(name=biome_name)
     except Biomes.DoesNotExist:
         return render(request, 'subnautica/biomes.html', {'error': 'Biome not found'})
+
+    track_activity(request, Biomes, biome_name)
 
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
@@ -67,6 +73,8 @@ def tool_view(request, tool_name):
     except Tools.DoesNotExist:
         return render(request, 'subnautica/tools.html', {'error': 'Tool not found'})
 
+    track_activity(request, Tools, tool_name)
+
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -100,6 +108,8 @@ def vehicle_view(request, vehicle_name):
         vehicle = Vehicles.objects.get(name=vehicle_name)
     except Vehicles.DoesNotExist:
         return render(request, 'subnautica/vehicles.html', {'error': 'Vehicle not found'})
+
+    track_activity(request, Vehicles, vehicle_name)
 
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
@@ -140,6 +150,8 @@ def resource_view(request, resource_name):
     except Resources.DoesNotExist:
         return render(request, 'subnautica/resources.html', {'error': 'Resource not found'})
 
+    track_activity(request, Resources, resource_name)
+
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -178,6 +190,8 @@ def flora_view(request, flora_name):
         flora = Floras.objects.get(name=flora_name)
     except Floras.DoesNotExist:
         return render(request, 'subnautica/floras.html', {'error': 'Flora not found'})
+
+    track_activity(request, Floras, flora_name)
 
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
@@ -218,11 +232,25 @@ def fauna_view(request, fauna_name):
     except Faunas.DoesNotExist:
         return render(request, 'subnautica/faunas.html', {'error': 'Fauna not found'})
 
+    track_activity(request, Faunas, fauna_name)
+
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment = get_comments(request, comment_form, fauna)
             comment.save()
+
+            activity_data = {
+                'user': request.user,
+                'action_type': 'COMMENT',
+                'item_type': 'Fauna',
+                'item_name': fauna.name,
+                'related_comment': comment
+            }
+            activity_form = ActivityForm(activity_data)
+            if activity_form.is_valid():
+                activity_form.save()
+
             messages.success(request, 'Comment submitted successfully')
             return redirect('subnautica:fauna_view', fauna_name=fauna.name)
     else:
@@ -259,6 +287,38 @@ def get_comments(request, comment_form, model):
     comment.content_type = content_type
     comment.object_id = model.id
     return comment
+
+# Helper function to track recent activity for different item pages
+def track_activity(request, model, name, action_type="VISIT"):
+    if request.user.is_authenticated:
+        url = reverse(model.get_view_url_name(), kwargs={model.get_view_url_param(): name })
+
+        duplicate_activity = Activity.objects.filter(
+            user=request.user,
+            action_type=action_type,
+            item_name=name,
+            item_type=model.__name__
+        ).first()
+
+        if duplicate_activity:
+            duplicate_activity.action_time = timezone.now()
+            duplicate_activity.save()
+        else:
+            activity_data = {
+                'user': request.user,
+                'action_type': action_type,
+                'item_type': model.__name__,
+                'item_name': name,
+                'url': url,
+            }
+            activity = Activity(**activity_data)
+            activity.save()
+
+        recent_activities = Activity.objects.filter(user=request.user).order_by('-action_time')[:5]
+
+        request.session['activity_feed'] = [activity.get_activity_msg() for activity in recent_activities]
+    else:
+        return
 
 def search_view(request):
     query = request.GET.get('query', '')
@@ -342,7 +402,10 @@ def login_view(request):
         return render(request, 'subnautica/login.html')
 
 def user_index_view(request):
-    return render(request, 'subnautica/index_user.html')
+    activities = Activity.objects.filter(user=request.user).order_by('-action_time')[:5]
+    print("Activities", activities)
+
+    return render(request, 'subnautica/index_user.html', {'activities': activities})
 
 def admin_user_view(request):
     return render(request, 'subnautica/admin_dashboard.html')

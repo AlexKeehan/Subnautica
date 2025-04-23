@@ -13,3 +13,11 @@ class Tools(models.Model):
 
     def get_img_path(self):
         return f"img/Tools/{self.get_img_name()}"
+
+    @classmethod
+    def get_view_url_name(cls):
+        return 'Subnautica:tool_view'
+
+    @classmethod
+    def get_view_url_param(cls):
+        return 'tool_name'

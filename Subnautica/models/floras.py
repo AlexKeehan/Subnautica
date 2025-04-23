@@ -14,3 +14,11 @@ class Floras(models.Model):
 
     def get_img_path(self):
         return f"img/Flora/{self.get_img_name()}"
+
+    @classmethod
+    def get_view_url_name(cls):
+        return 'Subnautica:flora_view'
+
+    @classmethod
+    def get_view_url_param(cls):
+        return 'flora_name'

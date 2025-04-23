@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from .models import *
+from .models.activity import Activity
 from .models.replies import Reply
 
 
@@ -107,4 +108,16 @@ class ReplyForm(forms.ModelForm):
         fields = ["content"]
         widgets = {
             "content": forms.Textarea(attrs={"placeholder": "Write reply here", "required": True}),
+        }
+
+class ActivityForm(forms.ModelForm):
+    class Meta:
+        model = Activity
+        fields = ["user", "action_type", "item_type", "item_name", "related_comment"]
+        widgets = {
+            "user": forms.HiddenInput(),
+            "action_type": forms.HiddenInput(),
+            "item_type": forms.HiddenInput(),
+            "item_name": forms.HiddenInput(),
+            "related_comment": forms.HiddenInput(),
         }

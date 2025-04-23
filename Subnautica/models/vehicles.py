@@ -13,3 +13,11 @@ class Vehicles(models.Model):
 
     def get_img_path(self):
         return f"img/Vehicles/{self.get_img_name()}"
+
+    @classmethod
+    def get_view_url_name(cls):
+        return 'Subnautica:vehicle_view'
+
+    @classmethod
+    def get_view_url_param(cls):
+        return 'vehicle_name'

@@ -20,12 +20,21 @@
         <!-- Left side has title & logo-->
         <div class="header_left">
             <!-- Source for game logo: https://subnautica.fandom.com/wiki/Subnautica_Wiki -->
-            <a href="{% url "Subnautica:subnautica_view" %}" class="logo_wrapper">
-                <img src="{% static "img/subnautica_logo.webp" %}" alt="logo" class="logo" />
-            </a>
-            <a href="{% url "Subnautica:subnautica_view" %}" class="title_wrapper">
-                <h1 class="title">Subnautica</h1>
-            </a>
+            {% if request.session.username %}
+                <a href="{% url "Subnautica:user_index_view" %}" class="logo_wrapper">
+                    <img src="{% static "img/subnautica_logo.webp" %}" alt="logo" class="logo" />
+                </a>
+                <a href="{% url "Subnautica:user_index_view" %}" class="title_wrapper">
+                    <h1 class="title">Subnautica</h1>
+                </a>
+            {% else %}
+                <a href="{% url "Subnautica:subnautica_view" %}" class="logo_wrapper">
+                    <img src="{% static "img/subnautica_logo.webp" %}" alt="logo" class="logo" />
+                </a>
+                <a href="{% url "Subnautica:subnautica_view" %}" class="title_wrapper">
+                    <h1 class="title">Subnautica</h1>
+                </a>
+            {% endif %}
         </div>
         <!-- Middle has search bar and navigation options-->
         <div class="header_center">
