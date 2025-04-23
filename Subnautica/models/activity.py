@@ -27,5 +27,7 @@ class Activity(models.Model):
             return f"You visited {self.item_name}"
         elif self.action_type == "COMMENT":
             return f"You commented on {self.item_name}"
+        elif self.action_type == "REPLY":
+            return f"Someone replied to you on {self.item_name}"
         else:
             return ""

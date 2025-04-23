@@ -20,3 +20,41 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['created_at']
+
+    def get_view_url_name(self):
+        model_name = self.content_type.model
+        print("MODEL NAME", model_name)
+
+        if model_name == "biomes":
+            return "Subnautica:biome_view"
+        elif model_name == "faunas":
+            return "Subnautica:fauna_view"
+        elif model_name == "floras":
+            return "Subnautica:flora_view"
+        elif model_name == "tools":
+            return "Subnautica:tool_view"
+        elif model_name == "vehicles":
+            return "Subnautica:vehicle_view"
+        elif model_name == "resources":
+            return "Subnautica:resource_view"
+        else:
+            return ""
+
+    def get_view_url_param(self):
+        model_name = self.content_type.model
+        print("MODEL NAME", model_name)
+
+        if model_name == "biomes":
+            return "biome_name"
+        elif model_name == "faunas":
+            return "fauna_name"
+        elif model_name == "floras":
+            return "flora_name"
+        elif model_name == "tools":
+            return "tool_name"
+        elif model_name == "vehicles":
+            return "vehicle_name"
+        elif model_name == "resources":
+            return "resource_name"
+        else:
+            return ""

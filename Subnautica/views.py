@@ -44,6 +44,18 @@ def biome_view(request, biome_name):
         if comment_form.is_valid():
             comment = get_comments(request, comment_form, biome)
             comment.save()
+
+            activity_data = {
+                'user': request.user,
+                'action_type': 'COMMENT',
+                'item_type': 'Biome',
+                'item_name': biome.name,
+                'related_comment': comment
+            }
+            activity_form = ActivityForm(activity_data)
+            if activity_form.is_valid():
+                activity_form.save()
+
             messages.success(request, 'Comment submitted successfully')
             return redirect('subnautica:biome_view', biome_name=biome.name)
     else:
@@ -80,6 +92,18 @@ def tool_view(request, tool_name):
         if comment_form.is_valid():
             comment = get_comments(request, comment_form, tool)
             comment.save()
+
+            activity_data = {
+                'user': request.user,
+                'action_type': 'COMMENT',
+                'item_type': 'Tool',
+                'item_name': tool.name,
+                'related_comment': comment
+            }
+            activity_form = ActivityForm(activity_data)
+            if activity_form.is_valid():
+                activity_form.save()
+
             messages.success(request, 'Comment submitted successfully')
             return redirect('subnautica:tool_view', tool_name=tool.name)
     else:
@@ -116,6 +140,18 @@ def vehicle_view(request, vehicle_name):
         if comment_form.is_valid():
             comment = get_comments(request, comment_form, vehicle)
             comment.save()
+
+            activity_data = {
+                'user': request.user,
+                'action_type': 'COMMENT',
+                'item_type': 'vehicle',
+                'item_name': vehicle.name,
+                'related_comment': comment
+            }
+            activity_form = ActivityForm(activity_data)
+            if activity_form.is_valid():
+                activity_form.save()
+
             messages.success(request, 'Comment submitted successfully')
             return redirect('subnautica:vehicle_view', vehicle_name=vehicle.name)
     else:
@@ -157,6 +193,18 @@ def resource_view(request, resource_name):
         if comment_form.is_valid():
             comment = get_comments(request, comment_form, resource)
             comment.save()
+
+            activity_data = {
+                'user': request.user,
+                'action_type': 'COMMENT',
+                'item_type': 'Resource',
+                'item_name': resource.name,
+                'related_comment': comment
+            }
+            activity_form = ActivityForm(activity_data)
+            if activity_form.is_valid():
+                activity_form.save()
+
             messages.success(request, 'Comment submitted successfully')
             return redirect('subnautica:resource_view', resource_name=resource.name)
     else:
@@ -198,6 +246,18 @@ def flora_view(request, flora_name):
         if comment_form.is_valid():
             comment = get_comments(request, comment_form, flora)
             comment.save()
+
+            activity_data = {
+                'user': request.user,
+                'action_type': 'COMMENT',
+                'item_type': 'Flora',
+                'item_name': flora.name,
+                'related_comment': comment
+            }
+            activity_form = ActivityForm(activity_data)
+            if activity_form.is_valid():
+                activity_form.save()
+
             messages.success(request, 'Comment submitted successfully')
             return redirect('subnautica:flora_view', flora_name=flora.name)
     else:
@@ -289,34 +349,83 @@ def get_comments(request, comment_form, model):
     return comment
 
 # Helper function to track recent activity for different item pages
-def track_activity(request, model, name, action_type="VISIT"):
+def track_activity(request, model, name, action_type="VISIT", comment_id=None, is_reply=False):
+    # Check if user is logged in
     if request.user.is_authenticated:
-        url = reverse(model.get_view_url_name(), kwargs={model.get_view_url_param(): name })
-
-        duplicate_activity = Activity.objects.filter(
-            user=request.user,
-            action_type=action_type,
-            item_name=name,
-            item_type=model.__name__
-        ).first()
-
-        if duplicate_activity:
-            duplicate_activity.action_time = timezone.now()
-            duplicate_activity.save()
+        # Different logic for comment model
+        if model == Comment and comment_id:
+            comment = Comment.objects.get(id=comment_id)
+            url = reverse(comment.get_view_url_name(), kwargs={comment.get_view_url_param(): comment.content_object.name })
+        # Normal url generation for other models
         else:
-            activity_data = {
-                'user': request.user,
-                'action_type': action_type,
-                'item_type': model.__name__,
-                'item_name': name,
-                'url': url,
-            }
-            activity = Activity(**activity_data)
-            activity.save()
+            url = reverse(model.get_view_url_name(), kwargs={model.get_view_url_param(): name })
 
-        recent_activities = Activity.objects.filter(user=request.user).order_by('-action_time')[:5]
+        # If it is a reply activity, then handle with different logic
+        if is_reply:
+            action_type = "REPLY"
 
+            # Make sure the user that got replied to is the one that gets the new activity
+            user_replied_to = comment.user
+            if user_replied_to != request.user:
+                # Check for duplicate activity
+                duplicate_activity = Activity.objects.filter(
+                    user=request.user,
+                    action_type=action_type,
+                    item_name=name,
+                    item_type=model.__name__
+                ).first()
+
+                # If dupe, then just update time for existing entry
+                if duplicate_activity:
+                    duplicate_activity.action_time = timezone.now()
+                    duplicate_activity.save()
+                else:
+                    # Create new activity
+                    activity_data = {
+                        'user': user_replied_to,
+                        'action_type': action_type,
+                        'item_type': 'Comment',
+                        'item_name': comment.content_object.name,
+                        'url': url,
+                    }
+
+                    # Add to db
+                    activity = Activity(**activity_data)
+                    activity.save()
+
+                # Update recent activities
+                recent_activities = Activity.objects.filter(user=user_replied_to).order_by('-action_time')[:5]
+        # Other activities besides replies
+        else:
+            # Check for duplicate activity
+            duplicate_activity = Activity.objects.filter(
+                user=request.user,
+                action_type=action_type,
+                item_name=name,
+                item_type=model.__name__
+            ).first()
+
+            # If dupe, then update existing time
+            if duplicate_activity:
+                duplicate_activity.action_time = timezone.now()
+                duplicate_activity.save()
+            else:
+                # Create new activity
+                activity_data = {
+                    'user': request.user,
+                    'action_type': action_type,
+                    'item_type': model.__name__,
+                    'item_name': name,
+                    'url': url,
+                }
+                # Save new activity
+                activity = Activity(**activity_data)
+                activity.save()
+
+            recent_activities = Activity.objects.filter(user=request.user).order_by('-action_time')[:5]
+        # Add recent activities to session
         request.session['activity_feed'] = [activity.get_activity_msg() for activity in recent_activities]
+    # Not logged in
     else:
         return
 
@@ -342,6 +451,8 @@ def add_reply_view(request, model, item, comment_id):
             reply.user = request.user
             reply.comment = comment
             reply.save()
+
+            track_activity(request, model=Comment, name=comment.content_type, action_type="REPLY", comment_id=comment_id, is_reply=True)
 
             reply_data = {
                 "user": reply.user.username,
