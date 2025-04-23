@@ -9,6 +9,9 @@ class Activity(models.Model):
     ACTIVITY_TYPES = [
         ("VISIT", "Page Visit"),
         ("COMMENT", "Comment Posted"),
+        ("REPLY", "Reply Posted"),
+        ("ROLE_UPDATED", "Role Updated"),
+        ("UPDATED_ROLE", "Updated Role"),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -29,5 +32,9 @@ class Activity(models.Model):
             return f"You commented on {self.item_name}"
         elif self.action_type == "REPLY":
             return f"Someone replied to you on {self.item_name}"
+        elif self.action_type == "ROLE_UPDATED":
+            return f"Your Permissions have changed"
+        elif self.action_type == "UPDATED_ROLE":
+            return f"You changed permissions for {self.item_name}"
         else:
             return ""

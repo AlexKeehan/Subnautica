@@ -514,7 +514,6 @@ def login_view(request):
 
 def user_index_view(request):
     activities = Activity.objects.filter(user=request.user).order_by('-action_time')[:5]
-    print("Activities", activities)
 
     return render(request, 'subnautica/index_user.html', {'activities': activities})
 
@@ -577,13 +576,36 @@ def update_user_role_view(request, user_id):
 
         # Get new role
         new_role = request.POST.get("new_role")
-        if new_role == "admin":
+        if new_role == "admin" and not user.is_staff:
             user.is_staff = True
         else:
             user.is_staff = False
 
         # Save new role
         user.save()
+
+        activity_data = {
+            'user': user,
+            'action_type': 'ROLE_UPDATED',
+            'item_type': 'User',
+            'item_name': user.username,
+            'url': reverse('subnautica:profile_view', kwargs={'username': user.username}),
+        }
+
+        activity = Activity(**activity_data)
+        activity.save()
+
+        # Update admin as well if a user's permissions get changed
+        admin_activity_data = {
+            'user': request.user,
+            'action_type': 'UPDATED_ROLE',
+            'item_type': 'User',
+            'item_name': user.username,
+            'url': reverse('subnautica:manage_users_view'),
+        }
+
+        admin_activity = Activity(**admin_activity_data)
+        admin_activity.save()
 
         return redirect('subnautica:manage_users_view')
     else:

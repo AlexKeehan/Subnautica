@@ -43,16 +43,15 @@
             <div class="right_bar">
                 <ul>
                     <li>
-                        <a class="history_title">History</a>
-                        <ul class="history_list">
-                            <li><a href="{% url "Subnautica:biome_view" biome_name="safe_shallows" %}">Safe Shallows</a></li>
-                        </ul>
-                    </li>
-                    <li>
                         <a class="activity_title">Activity</a>
                         <ul class="activity_list">
                             {% for activity in activities %}
-                                <li><a href="{{ activity.url }}">{{ activity.get_activity_msg }}</a></li>
+                                <li>
+                                    <a href="{{ activity.url }}">{{ activity.get_activity_msg }}</a>
+                                    <div class="activity_timestamp">
+                                        {{ activity.action_time|date:"M d, Y h:i A" }}
+                                    </div>
+                                </li>
                             {% endfor %}
                         </ul>
                     </li>

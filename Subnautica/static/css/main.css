@@ -207,6 +207,20 @@ nav ul li a {
     text-decoration: none;
 }
 
+.right_bar .activity_title {
+    background-color: rgba(39, 206, 245, 0.5);
+    font-size: 1.2em;
+}
+
+.right_bar .activity_timestamp {
+    font-size: .6em;
+    color: white;
+}
+
+.right_bar .activity_list {
+    font-size: .8em;
+}
+
 .socials_list li {
     margin-bottom: .3em;
     margin-left: 1em;
@@ -226,12 +240,6 @@ nav ul li a {
 
 .socials_list a:hover {
     color: #0056b3;
-}
-
-.right_bar li a {
-    background-color: rgba(39, 206, 245, 0.5);
-    box-shadow: 0 .2em .4em rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
 }
 
 .main_content {
