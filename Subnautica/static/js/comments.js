@@ -14,11 +14,14 @@ function displayReplyForm(comment_id) {
     }
 }
 
+// Function to dynamically add replies to a comment
 function addReply(event, comment_id, reply_form) {
     event.preventDefault();
 
+    // Get form data
     var form_data = new FormData(reply_form);
 
+    // Construct url
     var base_url = window.location.pathname.split('/');
     var model = base_url[2];
     var item = base_url[3];
@@ -27,16 +30,20 @@ function addReply(event, comment_id, reply_form) {
 
     console.log("Sending request to", url);
 
+    // Make xhr request
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
 
     xhr.onload = function () {
         console.log("XHR status", xhr.status);
         console.log("XHR Response:", xhr.responseText);
         if (xhr.status === 200) {
+            // Get reply
             var reply = JSON.parse(xhr.responseText);
 
+            // Construct reply html
             var reply_html = `
                 <div class="reply">
                     <div class="user_info">
@@ -50,15 +57,19 @@ function addReply(event, comment_id, reply_form) {
                 </div>
             `;
 
+            // Try to get existing reply wrapper
             var reply_wrapper = document.querySelector(`#comment_${comment_id}_reply_wrapper`);
+            // If reply wrapper does not exist, then make one
             if (!reply_wrapper) {
                 reply_wrapper = document.createElement("div");
                 reply_wrapper.classList.add("reply_wrapper");
                 document.querySelector("#comment_" + comment_id).appendChild(reply_wrapper);
             }
 
+            // Add reply to reply wrapper
             reply_wrapper.innerHTML += reply_html;
 
+            // Reset reply form for next request
             reply_form.querySelector('textarea').value = '';
             console.log("DONE");
         }
@@ -66,6 +77,6 @@ function addReply(event, comment_id, reply_form) {
             alert("Error posting reply");
         }
     };
-
+    // Send data
     xhr.send(form_data);
 }

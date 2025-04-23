@@ -102,6 +102,14 @@
                             <div class="edit_icon_wrapper">
                                 <img src="{% static "img/edit_icon.jpg" %}" alt="Edit Icon" class="edit_icon" data-comment-id="{{ comment.id }}"/>
                             </div>
+                            <div class="del_icon_wrapper">
+                                <form method="POST" action="{% url 'Subnautica:delete_comment_view' comment.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="del_icon_button">
+                                        <img src="{% static "img/del_icon.jpg" %}" alt="Delete Icon" class="del_icon"/>
+                                    </button>
+                                </form>
+                            </div>
                         {% endif %}
 
                         <div class="reply_icon_wrapper">

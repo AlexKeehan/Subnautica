@@ -326,6 +326,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            login(request, user)
             # Use session variables
             request.session["username"] = user.username
             if user.is_staff:
@@ -433,14 +434,46 @@ def profile_view(request, username):
             # Save new data and then logout user to reenter credentials
             form.save()
 
-            logout_view(request)
-            return redirect('subnautica:login_view')
+            if form.cleaned_data.get('password') and form.cleaned_data['password'] != user.password:
+                logout_view(request)
+                return redirect('subnautica:login_view')
+            else:
+                messages.success(request,"Your Info Was Updated Successfully")
+                return redirect('subnautica:profile_view', username=user.username)
         else:
             messages.warning(request, "Profile update failed")
             return redirect('subnautica:profile_view', username=user.username)
     else:
         form = ProfileForm(instance=user)
     return render(request, 'subnautica/profile.html', {'form': form, 'user': user})
+
+def delete_comment_view(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    content_type = comment.content_type.model_class()
+
+    model = content_type.objects.get(id=comment.object_id)
+
+    if request.user == comment.user or request.user.is_staff:
+        comment.delete()
+        messages.success(request, "Comment Deleted Successfully")
+    else:
+        messages.error(request, "Error Deleting Comment")
+
+    if isinstance(model, Faunas):
+        return redirect(f'subnautica:fauna_view', fauna_name=model.name)
+    elif isinstance(model, Floras):
+        return redirect(f'subnautica:flora_view', flora_name=model.name)
+    elif isinstance(model, Biomes):
+        return redirect(f'subnautica:biome_view', biome_name=model.name)
+    elif isinstance(model, Tools):
+        return redirect(f'subnautica:tool_view', tool_name=model.name)
+    elif isinstance(model, Vehicles):
+        return redirect(f'subnautica:vehicle_view', vehicle_name=model.name)
+    elif isinstance(model, Resources):
+        return redirect(f'subnautica:resource_view', resource_name=model.name)
+    else:
+        return redirect('subnautica:subnautica_view')
 
 # View that handles adding new item logic
 def add_item_view(request):

@@ -26,6 +26,7 @@ urlpatterns = [
     path('profile/<str:username>/', views.profile_view, name='profile_view'),
     path('<str:model>/<str:item>/comment/<int:comment_id>/reply/', views.add_reply_view, name='add_reply_view'),
     path('<str:model>/<str:item>/comment/<int:comment_id>/edit/', views.edit_comment_view, name='edit_comment_view'),
+    path('comment/delete/<int:comment_id>/', views.delete_comment_view, name='delete_comment_view'),
     path('user_index/', views.user_index_view, name='user_index_view'),
     path('admin_dashboard/', views.admin_user_view, name='admin_user_view'),
     path('add_item/', views.add_item_view, name='add_item_view'),
