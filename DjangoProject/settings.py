@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-0+9jnp^dv(9kf86y62qlz_*%po2u8yo#zb#t#&$t8!ig=a)w3a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["subnautica.discovery.cs.vt.edu"]
 
 
 # Application definition
