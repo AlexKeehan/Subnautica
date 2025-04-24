@@ -336,3 +336,8 @@ footer {
     width: 1em;
     height: 1em;
 }
+
+.activity_feed_url {
+    text-decoration: none;
+    color: white;
+}

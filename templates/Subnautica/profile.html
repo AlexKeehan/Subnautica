@@ -60,5 +60,29 @@
                 <button type="submit">Save Changes</button>
             </div>
         </form>
+
+        <h2>Activity Feed</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in activities %}
+                    <tr>
+                        <td>{{ activity.user.username }}</td>
+                        <td>{{ activity.action_type }}</td>
+                        <td>
+                            <a href="{{ activity.url }}" class="activity_feed_url" target="_blank">{{ activity.get_activity_msg }}</a>
+                        </td>
+                        <td>{{ activity.action_time }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}

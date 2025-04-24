@@ -641,7 +641,10 @@ def profile_view(request, username):
             return redirect('subnautica:profile_view', username=user.username)
     else:
         form = ProfileForm(instance=user)
-    return render(request, 'subnautica/profile.html', {'form': form, 'user': user})
+
+    activities = Activity.objects.filter(user=request.user).order_by('-action_time')[:10]
+
+    return render(request, 'subnautica/profile.html', {'form': form, 'user': user, 'activities': activities})
 
 def delete_comment_view(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
