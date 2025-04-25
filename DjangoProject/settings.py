@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["subnautica.discovery.cs.vt.edu"]
 
+CSRF_TRUSTED_ORIGINS=["https://subnautica.discovery.cs.vt.edu"]
+
 
 # Application definition
 
